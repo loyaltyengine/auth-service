@@ -1,0 +1,14 @@
+export enum ErrorType {
+    VALIDATION_ERROR = 'validation_error',
+    BAD_REQUEST_ERROR = 'bad_request',
+    UNAUTHORIZED_ERROR = 'unauthorized_error',
+    FORBIDDEN_ERROR = 'forbidden_error',
+    NOT_FOUND = 'not_found',
+    CONFLICT_ERROR = 'conflict_error',
+    INTERNAL_SERVER_ERROR = 'internal_server_error',
+    TOKEN_EXPIRED = 'token_expired',
+    INVALID_TOKEN = 'invalid_token',
+    EMPTY_TOKEN = 'empty_token',
+    INVALID_CREDENTIALS = 'invalid_credentials',
+    EMAIL_ALREADY_EXISTS = 'email_already_exists',
+}
