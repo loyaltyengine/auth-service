@@ -3,6 +3,7 @@ import { ITokensRepository } from './tokens-repository.interface';
 import { CreateRefreshTokenDto } from '../dto/create-refresh-token.dto';
 import { RefreshTokenModel } from '../models/refresh-token.model';
 import { Injectable } from '@nestjs/common';
+import { UpdateRefreshTokenDto } from '../dto/update-refresh-token';
 
 @Injectable()
 export class TokensPrismaRepository implements ITokensRepository {
@@ -20,5 +21,24 @@ export class TokensPrismaRepository implements ITokensRepository {
             where: { jti },
         });
         return token;
+    }
+
+    async updateRefreshToken(jti: string, updates: UpdateRefreshTokenDto): Promise<RefreshTokenModel> {
+        const updatedToken = await this.prisma.refreshToken.update({
+            where: { jti },
+            data: updates,
+        });
+        return updatedToken;
+    }
+
+    async deleteRevokedOrExpiredTokens(expiresAt: Date, revokedAt: Date): Promise<void> {
+        await this.prisma.refreshToken.deleteMany({
+            where: {
+                OR: [
+                    { expiresAt: { lte: expiresAt } },
+                    { revoked: true, revokedAt: { lte: revokedAt } },
+                ],
+            },
+        });
     }
 }

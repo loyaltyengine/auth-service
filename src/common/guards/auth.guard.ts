@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { JwtPayloadDto } from 'src/modules/tokens/dto/jwt-payload.dto';
-import { JWT_SECRET } from 'src/shared/constants';
+import { AccessTokenPayloadDto } from 'src/modules/tokens/dto/access-token-payload.dto';
+import { ACCESS_TOKEN_SECRET } from 'src/shared/constants';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 
@@ -21,11 +21,11 @@ export class AuthGuard implements CanActivate {
             );
         }
         try {
-            const payload = await this.jwtService.verifyAsync(token, {
-                secret: JWT_SECRET,
+            const payload = await this.jwtService.verifyAsync<AccessTokenPayloadDto>(token, {
+                secret: ACCESS_TOKEN_SECRET,
             });
 
-            request['user'] = payload as JwtPayloadDto;
+            request['user'] = payload;
         } catch {
             throw new AuthenticationException(
                 'Authentication failed: Invalid token',

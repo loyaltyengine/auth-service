@@ -6,9 +6,12 @@ import { UsersModule } from './modules/users/users.module';
 import { TokensModule } from './modules/tokens/tokens.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { TasksModule } from './modules/tasks/tasks.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
+        ScheduleModule.forRoot(),
         ConfigModule.forRoot({
             isGlobal: true,
         }),
@@ -28,6 +31,7 @@ import { redisStore } from 'cache-manager-redis-yet';
         AuthModule,
         UsersModule,
         TokensModule,
+        TasksModule,
     ],
     controllers: [],
     providers: [],
