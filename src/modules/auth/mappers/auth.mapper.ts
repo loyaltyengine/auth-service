@@ -2,7 +2,6 @@ import { LoginResponse, RefreshResponse, RegisterResponse } from 'src/generated/
 import { StatusDto } from 'src/shared/dto/status.dto';
 import { LoginResultDto } from '../dto/login-result.dto';
 import { RegisterResultDto } from '../dto/register-result.dto';
-import { ACCESS_TOKEN_TYPE } from 'src/shared/constants';
 import { RefreshResultDto } from '../dto/refresh-result.dto';
 
 export class AuthMapper {
@@ -13,8 +12,8 @@ export class AuthMapper {
                 message: status.message,
             },
             accessToken: result.accessToken.token,
-            expiresIn: 3600,
-            tokenType: ACCESS_TOKEN_TYPE,
+            expiresIn: result.accessToken.expiresIn,
+            tokenType: result.accessToken.tokenType,
             user: {
                 id: result.user.id,
                 email: result.user.email,
@@ -47,7 +46,7 @@ export class AuthMapper {
             },
             accessToken: result.accessToken.token,
             expiresIn: result.accessToken.expiresIn,
-            tokenType: ACCESS_TOKEN_TYPE,
+            tokenType: result.accessToken.tokenType,
         };
     }
 }

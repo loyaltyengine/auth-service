@@ -31,13 +31,11 @@ export class TokensPrismaRepository implements ITokensRepository {
         return updatedToken;
     }
 
-    async deleteRevokedOrExpiredTokens(expiresAt: Date, revokedAt: Date): Promise<void> {
+    async deleteRevokedOrExpiredTokens(): Promise<void> {
+        const now = new Date();
         await this.prisma.refreshToken.deleteMany({
             where: {
-                OR: [
-                    { expiresAt: { lte: expiresAt } },
-                    { revoked: true, revokedAt: { lte: revokedAt } },
-                ],
+                OR: [{ expiresAt: { lte: now } }, { revoked: true }],
             },
         });
     }

@@ -11,4 +11,5 @@ export enum ErrorType {
     EMPTY_TOKEN = 'empty_token',
     INVALID_CREDENTIALS = 'invalid_credentials',
     EMAIL_ALREADY_EXISTS = 'email_already_exists',
+    INACTIVE_USER = 'inactive_user',
 }

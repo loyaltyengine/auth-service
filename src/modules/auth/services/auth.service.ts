@@ -61,27 +61,16 @@ export class AuthService implements IAuthService {
         };
     }
 
-    async refreshToken(refreshToken: string): Promise<RefreshResultDto> {
-        if (!refreshToken) {
-            throw new AuthenticationException(
-                'Refresh token failed',
-                ErrorType.EMPTY_TOKEN,
-                'No refresh token provided. Please log in again.',
-            );
-        }
+    async logout(accessToken: string, refreshToken: string): Promise<void> {
+        await this.tokenService.revokeAccessToken(accessToken);
+        await this.tokenService.revokeRefreshToken(refreshToken);
+    }
 
-        const decoded = await this.tokenService.verifyRefreshToken(refreshToken);
-        if (!decoded) {
-            throw new AuthenticationException(
-                'Refresh token failed',
-                ErrorType.INVALID_TOKEN,
-                'The provided refresh token is invalid',
-            );
-        }
-        // Fetch fresh user data to ensure user still exists and is active
-        const user = await this.usersService.getUserById(decoded.userId);
-        // New tokens
-        const newRefreshToken = await this.tokenService.rotateRefreshToken(decoded);
+    async refreshToken(refreshToken: string): Promise<RefreshResultDto> {
+        const payload = await this.tokenService.verifyRefreshToken(refreshToken);
+        const user = await this.usersService.getActiveUserById(payload.userId);
+
+        const newRefreshToken = await this.tokenService.rotateRefreshToken(payload);
         const newAccessToken = await this.tokenService.signAccessToken({
             userId: user.id,
             email: user.email,

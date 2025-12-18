@@ -6,6 +6,7 @@ import { RefreshResultDto } from '../dto/refresh-result.dto';
 
 export interface IAuthService {
     login(user: LoginUserDto): Promise<LoginResultDto>;
+    logout(accessToken: string, refreshToken: string): Promise<void>;
     register(user: RegisterDto): Promise<RegisterResultDto>;
     refreshToken(refreshToken: string): Promise<RefreshResultDto>;
 }

@@ -5,5 +5,5 @@ export interface ITokensRepository {
     createRefreshToken(refreshToken: CreateRefreshTokenDto): Promise<RefreshTokenModel>;
     findRefreshTokenByJti(jti: string): Promise<RefreshTokenModel | null>;
     updateRefreshToken(jti: string, updates: Partial<CreateRefreshTokenDto>): Promise<RefreshTokenModel>;
-    deleteRevokedOrExpiredTokens(expiriesAt: Date, revokedAt: Date): Promise<void>;
+    deleteRevokedOrExpiredTokens(): Promise<void>;
 }

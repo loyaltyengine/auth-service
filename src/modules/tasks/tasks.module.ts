@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TokenService } from '../tokens/services/token.service';
+import { TasksService } from './services/tasks.service';
+import { TokensModule } from '../tokens/tokens.module';
 
 @Module({
-    providers:[TokenService]
+    imports: [TokensModule],
+    providers: [TasksService],
+    exports: [TasksService],
 })
 export class TasksModule {}

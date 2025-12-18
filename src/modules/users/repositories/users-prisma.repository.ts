@@ -10,14 +10,14 @@ export class UsersPrismaRepository implements IUsersRepository {
 
     async findByEmail(email: string): Promise<UserModel | null> {
         const user = await this.prisma.user.findUnique({
-            where: { email, isActive: true },
+            where: { email },
         });
         return user;
     }
 
     async findById(id: string): Promise<UserModel | null> {
         const user = await this.prisma.user.findUnique({
-            where: { id, isActive: true },
+            where: { id },
         });
         return user;
     }
@@ -31,7 +31,7 @@ export class UsersPrismaRepository implements IUsersRepository {
 
     async emailExists(email: string): Promise<boolean> {
         const count = await this.prisma.user.count({
-            where: { email, isActive: true },
+            where: { email },
         });
         return count > 0;
     }

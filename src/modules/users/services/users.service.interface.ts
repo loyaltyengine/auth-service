@@ -4,7 +4,7 @@ import { UserDto } from '../dto/user.dto';
 
 export interface IUsersService {
     createUser(user: CreateUserDto): Promise<UserDto>;
-    getUserById(id: string): Promise<UserDto>;
-    getUserByEmail(email: string): Promise<UserDto>;
+    getActiveUserById(id: string): Promise<UserDto>;
+    getActiveUserByEmail(email: string): Promise<UserDto>;
     getUserByEmailWithPassword(email: string): Promise<PasswordUserDto | null>;
 }

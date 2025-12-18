@@ -16,4 +16,15 @@ export const REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN
     ? Number.parseInt(process.env.REFRESH_TOKEN_EXPIRES_IN, 10)
     : 604800;
 export const REFRESH_TOKEN_COOKIE_NAME = 'refreshToken';
-export const REFRESH_TOKEN_COOKIE_PATH = '/auth/v1/refresh';
+export const REFRESH_TOKEN_COOKIE_PATH = '/auth/v1';
+
+export const MILLISECONDS_PER_SECOND = 1000;
+
+// Cookie options
+export const REFRESH_TOKEN_COOKIE_OPTIONS = {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict' as const,
+    maxAge: REFRESH_TOKEN_EXPIRES_IN * MILLISECONDS_PER_SECOND,
+    path: REFRESH_TOKEN_COOKIE_PATH,
+};

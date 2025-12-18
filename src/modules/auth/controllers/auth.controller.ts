@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards,
 import type { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import type {
+    Response as ApiResponse,
     LoginRequest,
     LoginResponse,
     RefreshResponse,
@@ -13,7 +14,12 @@ import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
 import { loginRequestSchema } from '../validation/login.schema';
 import { registerRequestSchema } from '../validation/register.schema';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { REFRESH_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_PATH } from 'src/shared/constants';
+import {
+    REFRESH_TOKEN_COOKIE_NAME,
+    REFRESH_TOKEN_COOKIE_PATH,
+    REFRESH_TOKEN_COOKIE_OPTIONS,
+} from 'src/shared/constants';
+import { RefreshToken } from 'src/common/decorators/refresh-token.decorator';
 
 @Controller('auth/v1')
 export class AuthController {
@@ -28,13 +34,7 @@ export class AuthController {
             password: request.password,
         });
 
-        res.cookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: result.refreshToken.expiresIn * 1000,
-            path: REFRESH_TOKEN_COOKIE_PATH,
-        });
+        res.cookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken.token, REFRESH_TOKEN_COOKIE_OPTIONS);
 
         return AuthMapper.toLoginResponse({ code: 200, message: 'Login successful' }, result);
     }
@@ -54,20 +54,34 @@ export class AuthController {
 
     @Post('refresh')
     @HttpCode(HttpStatus.OK)
-    async refreshToken(@Req() request: Request, @Res({ passthrough: true }) res: Response): Promise<RefreshResponse> {
-        const token = request.cookies?.[REFRESH_TOKEN_COOKIE_NAME];
-
+    async refreshToken(
+        @RefreshToken() token: string,
+        @Res({ passthrough: true }) res: Response,
+    ): Promise<RefreshResponse> {
         const result = await this.authService.refreshToken(token);
 
-        res.cookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken.token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: result.refreshToken.expiresIn * 1000,
+        res.cookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken.token, REFRESH_TOKEN_COOKIE_OPTIONS);
+
+        return AuthMapper.toRefreshResponse({ code: HttpStatus.OK, message: 'Token refreshed successfully' }, result);
+    }
+
+    @Post('logout')
+    @UseGuards(AuthGuard)
+    @HttpCode(HttpStatus.OK)
+    async logout(
+        @Req() request: Request,
+        @RefreshToken() refreshToken: string,
+        @Res({ passthrough: true }) res: Response,
+    ): Promise<ApiResponse> {
+        const accessToken = request['token'];
+
+        await this.authService.logout(accessToken, refreshToken);
+
+        res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
             path: REFRESH_TOKEN_COOKIE_PATH,
         });
 
-        return AuthMapper.toRefreshResponse({ code: HttpStatus.OK, message: 'Token refreshed successfully' }, result);
+        return { status: { code: HttpStatus.OK, message: 'Logout successful' } };
     }
 
     // For testing the AuthGuard
