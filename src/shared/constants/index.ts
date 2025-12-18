@@ -28,3 +28,6 @@ export const REFRESH_TOKEN_COOKIE_OPTIONS = {
     maxAge: REFRESH_TOKEN_EXPIRES_IN * MILLISECONDS_PER_SECOND,
     path: REFRESH_TOKEN_COOKIE_PATH,
 };
+
+export const KEY_LOOKUP_SECRET = process.env.KEY_LOOKUP_SECRET || 'my_key_lookup_secret';
+export const API_KEY_HEADER_NAME = 'x-api-key';

@@ -31,7 +31,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
                     500,
                     'Internal server error',
                     ErrorType.INTERNAL_SERVER_ERROR,
-                    'An unexpected error occurred',
+                    `${exception instanceof HttpException ? exception.message : 'An unexpected error occurred'}`,
                 ),
             );
     }

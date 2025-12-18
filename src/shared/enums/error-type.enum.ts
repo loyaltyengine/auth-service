@@ -12,4 +12,6 @@ export enum ErrorType {
     INVALID_CREDENTIALS = 'invalid_credentials',
     EMAIL_ALREADY_EXISTS = 'email_already_exists',
     INACTIVE_USER = 'inactive_user',
+    INVALID_API_KEY = 'invalid_api_key',
+    MISSING_API_KEY = 'missing_api_key',
 }
