@@ -3,22 +3,21 @@ import { ApiKeyDto } from '../dto/api-key.dto';
 import { IApiKeyService } from './api-keys-service.interface';
 import { BadRequestException } from 'src/shared/exceptions/bad-request.exception';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
-import type { IApiRepository } from '../repositories/api-keys-repository.interface';
+import type { IApiKeysRepository } from '../repositories/api-keys-repository.interface';
 import { Inject, Injectable } from '@nestjs/common';
 import * as crypto from 'node:crypto';
 import { hashValue, verifyHashedValue, createFingerprint } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
-import { API_KEY_HEADER_NAME } from 'src/shared/constants';
 
 @Injectable()
 export class ApiKeysService implements IApiKeyService {
     constructor(
         private readonly propertiesService: PropertiesService,
-        @Inject('IApiRepository')
-        private readonly apiKeysRepository: IApiRepository,
+        @Inject('IApiKeysRepository')
+        private readonly apiKeysRepository: IApiKeysRepository,
     ) {}
 
-    async createApiKey(propertyId: string, userId: string): Promise<ApiKeyDto> {
+    async createApiKey(propertyId: string, userId: string, name?: string): Promise<ApiKeyDto> {
         // Verify that the user owns the property
         const ownsProperty = await this.propertiesService.validatePropertyOwnership(propertyId, userId);
         if (!ownsProperty) {
@@ -41,6 +40,7 @@ export class ApiKeysService implements IApiKeyService {
                     key: keyHash,
                     keyFingerprint: fingerprint,
                     propertyId: propertyId,
+                    name: name,
                 });
 
                 // Return plain key
@@ -65,24 +65,29 @@ export class ApiKeysService implements IApiKeyService {
         );
     }
 
-    async verifyApiKey(key: string | null): Promise<void> {
-        if (!key) {
-            throw new AuthenticationException(
-                'Missing API key in Authorization header',
-                ErrorType.MISSING_API_KEY,
-                `Provide API key in the ${API_KEY_HEADER_NAME} header`,
-            );
-        }
-        // Verify key
+    async verifyApiKey(key: string): Promise<void> {
         const fingerprint = createFingerprint(key);
         const apiKey = await this.apiKeysRepository.findApiKeyByKey(fingerprint);
-        if (!apiKey || !(await verifyHashedValue(key, apiKey.key))) {
+        if (!apiKey || !apiKey.isActive || !(await verifyHashedValue(key, apiKey.key))) {
             throw new AuthenticationException(
                 'API key authentication failed: Invalid API key',
                 ErrorType.INVALID_API_KEY,
                 'The provided API key is invalid',
             );
         }
+    }
+
+    async deactivateApiKey(key: string): Promise<void> {
+        const fingerprint = createFingerprint(key);
+        const apiKey = await this.apiKeysRepository.findApiKeyByKey(fingerprint);
+        if (!apiKey) {
+            throw new AuthenticationException(
+                'Cannot deactivate API key: Key not found',
+                ErrorType.INVALID_API_KEY,
+                'The provided API key does not exist',
+            );
+        }
+        await this.apiKeysRepository.updateApiKey(fingerprint, { isActive: false });
     }
 
     private generateApiKey(): string {

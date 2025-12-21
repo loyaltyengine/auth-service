@@ -1,7 +1,9 @@
 import { API_KEY_HEADER_NAME, HASH_SALT_ROUNDS, KEY_LOOKUP_SECRET } from '../constants';
 import bcrypt from 'bcrypt';
 import { Request } from 'express';
-import { randomBytes, createHmac, createHash } from 'node:crypto';
+import { randomBytes, createHmac } from 'node:crypto';
+import { AuthenticationException } from '../exceptions/authentication.exception';
+import { ErrorType } from '../enums/error-type.enum';
 
 export const hashValue = async (value: string): Promise<string> => {
     return bcrypt.hash(value, HASH_SALT_ROUNDS);
@@ -19,12 +21,37 @@ export const createFingerprint = (value: string): string => {
     return createHmac('sha256', KEY_LOOKUP_SECRET).update(value).digest('hex');
 };
 
-export const extractTokenFromHeader = (request: Request): string | null => {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : null;
+export const extractTokenFromHeader = (request: Request): string => {
+    const header = request.headers.authorization;
+    if (!header) {
+        throw new AuthenticationException(
+            'Missing authorization token',
+            ErrorType.EMPTY_TOKEN,
+            'Provide a Bearer token in the Authorization header',
+        );
+    }
+
+    const [type, token] = header.split(' ');
+    if (type !== 'Bearer' || !token) {
+        throw new AuthenticationException(
+            'Invalid authorization token',
+            ErrorType.INVALID_TOKEN,
+            'Provide a valid Bearer token in the Authorization header',
+        );
+    }
+
+    return token;
 };
 
-export const extractApiKeyFromHeader = (request: Request): string | null => {
-    const [type, apiKey] = request.headers[API_KEY_HEADER_NAME]?.toString().split(' ') ?? [];
-    return type === 'ApiKey' ? apiKey : null;
+export const extractApiKeyFromHeader = (request: Request): string => {
+    const apiKey = request.headers[API_KEY_HEADER_NAME]?.toString();
+    if (!apiKey) {
+        throw new AuthenticationException(
+            'Missing API key in header',
+            ErrorType.MISSING_API_KEY,
+            `Provide API key in the ${API_KEY_HEADER_NAME} header`,
+        );
+    }
+
+    return apiKey;
 };
