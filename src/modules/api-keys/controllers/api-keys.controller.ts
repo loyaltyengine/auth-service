@@ -13,7 +13,8 @@ export class ApiKeysController {
     @HttpCode(HttpStatus.CREATED)
     async createApiKey(@Req() request: any, @Body() requestBody: CreateApiKeyRequest, @Param('propertyId') propertyId: string): Promise<CreateApiKeyResponse> {
         const userId = request.user.userId;
-        const apiKey = await this.apiKeysService.createApiKey(propertyId, userId, requestBody.name);
+        const { name } = requestBody;
+        const apiKey = await this.apiKeysService.createApiKey(propertyId, userId, name);
         return {
             status: { code: 201, message: 'API key created successfully' },
             apiKey: apiKey.key,

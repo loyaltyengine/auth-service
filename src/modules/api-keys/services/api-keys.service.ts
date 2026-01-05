@@ -52,6 +52,7 @@ export class ApiKeysService implements IApiKeyService {
             } catch (err: any) {
                 // See: https://www.prisma.io/docs/orm/reference/error-reference
                 if (err?.code === 'P2002' && attempt < MAX_ATTEMPTS) {
+                    console.log(`Collision detected on attempt ${attempt}, retrying...`);
                     continue;
                 }
                 throw err;
