@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TokenService } from './services/token.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ACCESS_TOKEN_EXPIRES_IN, JWT_SECRET } from 'src/shared/constants';
 import { PrismaService } from '../prisma/prisma.service';
 import { TokensPrismaRepository } from './repositories/tokens.repository';
 
+@Global()
 @Module({
     imports: [
         JwtModule.register({

@@ -8,6 +8,8 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ApiKeysModule } from './modules/api-keys/api-keys.module';
+import { PropertiesModule } from './modules/properties/properties.module';
 
 @Module({
     imports: [
@@ -32,6 +34,8 @@ import { ScheduleModule } from '@nestjs/schedule';
         UsersModule,
         TokensModule,
         TasksModule,
+        ApiKeysModule,
+        PropertiesModule,
     ],
     controllers: [],
     providers: [],
