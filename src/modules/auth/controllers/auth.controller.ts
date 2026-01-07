@@ -1,6 +1,5 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { AuthService } from '../services/auth.service';
 import type {
     Response as ApiResponse,
     LoginRequest,
@@ -20,10 +19,11 @@ import {
     REFRESH_TOKEN_COOKIE_OPTIONS,
 } from 'src/shared/constants';
 import { RefreshToken } from 'src/common/decorators/refresh-token.decorator';
+import type { AuthService } from '../services/auth-service.interface';
 
 @Controller('auth/v1')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(@Inject('AuthService') private readonly authService: AuthService) {}
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
