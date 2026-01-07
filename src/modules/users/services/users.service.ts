@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IUsersService } from './users.service.interface';
+import { UsersService } from './users-service.interface';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserDto } from '../dto/user.dto';
-import type { IUsersRepository } from '../repositories/users.repository.interface';
+import type { UsersRepository } from '../repositories/users-repository.interface';
 import { BadRequestException } from 'src/shared/exceptions/bad-request.exception';
 import { hashValue } from 'src/shared/utils';
 import { PasswordUserDto } from '../dto/password-user.dto';
@@ -12,7 +12,7 @@ import { NotFoundException } from 'src/shared/exceptions/not-found.exception';
 import { EmailDto } from '../dto/email.dto';
 
 @Injectable()
-export class UsersService implements IUsersService {
+export class UsersServiceImpl implements UsersService {
     private readonly USER_NOT_FOUND_MGS = 'User not found';
     private readonly USER_NOT_FOUND_DESC = 'User not found';
 
@@ -20,8 +20,8 @@ export class UsersService implements IUsersService {
     private readonly INACTIVE_USER_DESC = 'The user account is inactive.';
 
     constructor(
-        @Inject('IUsersRepository')
-        private readonly usersRepository: IUsersRepository,
+        @Inject('UsersRepository')
+        private readonly usersRepository: UsersRepository,
     ) {}
 
     async createUser(user: CreateUserDto): Promise<UserDto> {
