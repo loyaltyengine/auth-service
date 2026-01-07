@@ -1,9 +1,12 @@
-import { CreateUserDto } from '../dto/create-user.dto';
+
 import { UserModel } from '../models/user.model';
+import { CreateUserData } from './types/create-user.data';
+import { EmailModel } from '../models/email.model';
 
 export interface IUsersRepository {
     findByEmail(email: string): Promise<UserModel | null>;
     findById(id: string): Promise<UserModel | null>;
-    create(user: CreateUserDto): Promise<UserModel>;
+    create(data: CreateUserData): Promise<UserModel>;
     emailExists(email: string): Promise<boolean>;
+    findEmailByAddress(email: string): Promise<EmailModel | null>;
 }

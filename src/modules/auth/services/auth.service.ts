@@ -20,8 +20,8 @@ export class AuthService implements IAuthService {
     ) {}
 
     async login(loginInfo: LoginUserDto): Promise<LoginResultDto> {
-        const passwordUser = await this.usersService.getUserByEmailWithPassword(loginInfo.email);
-        if (!passwordUser || !(await verifyHashedValue(loginInfo.password, passwordUser.password))) {
+        const passwordUser = await this.usersService.findUserByEmailWithPassword(loginInfo.email);
+        if (!passwordUser || !passwordUser.password || !(await verifyHashedValue(loginInfo.password, passwordUser.password))) {
             throw new AuthenticationException(
                 'Authentication failed',
                 ErrorType.INVALID_CREDENTIALS,
@@ -32,7 +32,7 @@ export class AuthService implements IAuthService {
 
         const accessToken = await this.tokenService.signAccessToken({
             userId: user.id,
-            email: user.email,
+            email: user.primaryEmail,
             jti: createJti(),
         });
         const refreshToken = await this.tokenService.signRefreshToken({
@@ -50,6 +50,7 @@ export class AuthService implements IAuthService {
     async register(registerInfo: RegisterDto): Promise<RegisterResultDto> {
         const createdUser = await this.usersService.createUser({
             email: registerInfo.email,
+            isEmailPrimary: true,
             firstName: registerInfo.firstName,
             lastName: registerInfo.lastName,
             password: registerInfo.password,
@@ -73,7 +74,7 @@ export class AuthService implements IAuthService {
         const newRefreshToken = await this.tokenService.rotateRefreshToken(payload);
         const newAccessToken = await this.tokenService.signAccessToken({
             userId: user.id,
-            email: user.email,
+            email: user.primaryEmail,
             jti: createJti(),
         });
 

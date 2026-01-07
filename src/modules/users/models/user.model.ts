@@ -1,3 +1,5 @@
-import { User as PrismaUser } from 'src/generated/prisma/client';
+import { EmailModel, UserModel as PrismaUser } from 'src/generated/prisma/models';
 
-export type UserModel = PrismaUser;
+export interface UserModel extends PrismaUser {
+    emails: EmailModel[];
+};

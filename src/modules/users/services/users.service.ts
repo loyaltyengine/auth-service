@@ -9,6 +9,7 @@ import { PasswordUserDto } from '../dto/password-user.dto';
 import { UserMapper } from '../mappers/user.mapper';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
 import { NotFoundException } from 'src/shared/exceptions/not-found.exception';
+import { EmailDto } from '../dto/email.dto';
 
 @Injectable()
 export class UsersService implements IUsersService {
@@ -29,8 +30,12 @@ export class UsersService implements IUsersService {
         }
 
         const createdUser = await this.usersRepository.create({
-            ...user,
-            password: await hashValue(user.password),
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            isEmailVerified: user.isEmailVerified,
+            isEmailPrimary: user.isEmailPrimary,
+            password: user.password ? await hashValue(user.password) : undefined,
         });
 
         return UserMapper.toDto(createdUser);
@@ -60,7 +65,7 @@ export class UsersService implements IUsersService {
         return UserMapper.toDto(user);
     }
 
-    async getUserByEmailWithPassword(email: string): Promise<PasswordUserDto | null> {
+    async findUserByEmailWithPassword(email: string): Promise<PasswordUserDto | null> {
         const user = await this.usersRepository.findByEmail(email);
         if (!user) {
             // not throwing a NotFoundException because of security reasons
@@ -68,5 +73,13 @@ export class UsersService implements IUsersService {
         }
         // Returning even if the user is inactive for login purposes
         return UserMapper.toPasswordDto(user);
+    }
+
+    async findEmail(email: string): Promise<EmailDto | null> {
+        const emailRecord = await this.usersRepository.findEmailByAddress(email);
+        if (!emailRecord) {
+            return null;
+        }
+        return { userId: emailRecord.userId, email: emailRecord.email };
     }
 }

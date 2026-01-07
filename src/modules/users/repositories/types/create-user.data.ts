@@ -1,10 +1,9 @@
-
-export interface CreateUserDto {
-    password?: string | null;
+export type CreateUserData = {
     firstName: string;
     lastName: string;
     email: string;
-    profilePictureUrl?: string | null;
+    password?: string;
+    profilePictureUrl?: string;
     isEmailVerified?: boolean;
     isEmailPrimary?: boolean;
-}
+};

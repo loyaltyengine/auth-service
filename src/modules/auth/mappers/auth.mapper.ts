@@ -16,7 +16,7 @@ export class AuthMapper {
             tokenType: result.accessToken.tokenType,
             user: {
                 id: result.user.id,
-                email: result.user.email,
+                email: result.user.primaryEmail,
                 firstName: result.user.firstName,
                 lastName: result.user.lastName,
             },
@@ -31,7 +31,7 @@ export class AuthMapper {
             },
             user: {
                 id: result.user.id,
-                email: result.user.email,
+                email: result.user.primaryEmail,
                 firstName: result.user.firstName,
                 lastName: result.user.lastName,
             },

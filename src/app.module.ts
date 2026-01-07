@@ -10,6 +10,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ApiKeysModule } from './modules/api-keys/api-keys.module';
 import { PropertiesModule } from './modules/properties/properties.module';
+import { OauthModule } from './modules/oauth/oauth.module';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { PropertiesModule } from './modules/properties/properties.module';
         TasksModule,
         ApiKeysModule,
         PropertiesModule,
+        OauthModule,
     ],
     controllers: [],
     providers: [],
