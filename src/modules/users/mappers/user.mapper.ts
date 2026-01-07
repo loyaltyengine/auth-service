@@ -6,7 +6,7 @@ export class UserMapper {
     static toDto(user: UserModel): UserDto {
         return {
             id: user.id,
-            email: user.email,
+            primaryEmail: user.emails?.find(email => email.isPrimary)?.email || '',
             firstName: user.firstName,
             lastName: user.lastName,
         };
@@ -15,10 +15,10 @@ export class UserMapper {
     static toPasswordDto(user: UserModel): PasswordUserDto {
         return {
             id: user.id,
-            email: user.email,
+            primaryEmail: user.emails?.find(email => email.isPrimary)?.email || '',
             firstName: user.firstName,
             lastName: user.lastName,
-            password: user.password,
+            password: user.password ? user.password : undefined,
         };
     }
 }
