@@ -3,6 +3,7 @@ import { StatusDto } from 'src/shared/dto/status.dto';
 import { LoginResultDto } from '../dto/login-result.dto';
 import { RegisterResultDto } from '../dto/register-result.dto';
 import { RefreshResultDto } from '../dto/refresh-result.dto';
+import { UserMapper } from 'src/modules/users/mappers/user.mapper';
 
 export class AuthMapper {
     static toLoginResponse(status: StatusDto, result: LoginResultDto): LoginResponse {
@@ -14,12 +15,7 @@ export class AuthMapper {
             accessToken: result.accessToken.token,
             expiresIn: result.accessToken.expiresIn,
             tokenType: result.accessToken.tokenType,
-            user: {
-                id: result.user.id,
-                email: result.user.primaryEmail,
-                firstName: result.user.firstName,
-                lastName: result.user.lastName,
-            },
+            user: UserMapper.toApiUser(result.user),
         };
     }
 
@@ -29,12 +25,7 @@ export class AuthMapper {
                 code: status.code,
                 message: status.message,
             },
-            user: {
-                id: result.user.id,
-                email: result.user.primaryEmail,
-                firstName: result.user.firstName,
-                lastName: result.user.lastName,
-            },
+            user: UserMapper.toApiUser(result.user),
         };
     }
 

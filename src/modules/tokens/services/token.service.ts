@@ -18,6 +18,7 @@ import { createJti, hashValue, verifyHashedValue } from 'src/shared/utils';
 import { RefreshTokenPayloadDto } from '../dto/refresh-token-payload.dto';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
+import type { UsersService } from 'src/modules/users/services/users-service.interface';
 
 @Injectable()
 export class TokenService implements ITokenService {
