@@ -1,12 +1,12 @@
 import { PrismaService } from 'src/modules/prisma/prisma.service';
-import { ITokensRepository } from './tokens-repository.interface';
+import { TokensRepository } from './tokens-repository.interface';
 import { CreateRefreshTokenDto } from '../dto/create-refresh-token.dto';
 import { RefreshTokenModel } from '../models/refresh-token.model';
 import { Injectable } from '@nestjs/common';
 import { UpdateRefreshTokenDto } from '../dto/update-refresh-token';
 
 @Injectable()
-export class TokensPrismaRepository implements ITokensRepository {
+export class PrismaTokensRepository implements TokensRepository {
     constructor(private readonly prisma: PrismaService) {}
 
     async createRefreshToken(refreshToken: CreateRefreshTokenDto): Promise<RefreshTokenModel> {

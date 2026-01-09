@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ITokenService } from './token-service.interface';
+import { TokenService } from './token-service.interface';
 import { AccessTokenDto } from '../dto/access-token.dto';
 import { AccessTokenPayloadDto } from '../dto/access-token-payload.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -13,19 +13,18 @@ import {
 } from 'src/shared/constants';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
-import type { ITokensRepository } from '../repositories/tokens-repository.interface';
+import type { TokensRepository } from '../repositories/tokens-repository.interface';
 import { createJti, hashValue, verifyHashedValue } from 'src/shared/utils';
 import { RefreshTokenPayloadDto } from '../dto/refresh-token-payload.dto';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
-import type { UsersService } from 'src/modules/users/services/users-service.interface';
 
 @Injectable()
-export class TokenService implements ITokenService {
+export class TokenServiceImpl implements TokenService {
     constructor(
         private readonly jwtService: JwtService,
         @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-        @Inject('ITokensRepository') private readonly tokensRepository: ITokensRepository,
+        @Inject('TokensRepository') private readonly tokensRepository: TokensRepository,
     ) {}
 
     async signAccessToken(payload: AccessTokenPayloadDto): Promise<AccessTokenDto> {

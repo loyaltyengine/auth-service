@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
-import { TokenService } from 'src/modules/tokens/services/token.service';
+import type { TokenService } from 'src/modules/tokens/services/token-service.interface';
 import type { UsersService } from 'src/modules/users/services/users-service.interface';
 import { extractTokenFromHeader } from 'src/shared/utils';
 
@@ -8,6 +8,7 @@ export class AuthGuard implements CanActivate {
     private readonly REACTIVATE_PATH = 'me/reactivate';
 
     constructor(
+        @Inject('TokenService')
         private readonly tokenService: TokenService,
         @Inject('UsersService') private readonly usersService: UsersService
     ) { }

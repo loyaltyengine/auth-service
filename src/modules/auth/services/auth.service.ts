@@ -7,15 +7,16 @@ import type { UsersService } from 'src/modules/users/services/users-service.inte
 import { createJti, verifyHashedValue } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { RegisterResultDto } from '../dto/register-result.dto';
-import { TokenService } from 'src/modules/tokens/services/token.service';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
 import { RefreshResultDto } from '../dto/refresh-result.dto';
+import type { TokenService } from 'src/modules/tokens/services/token-service.interface';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
     constructor(
         @Inject('UsersService')
         private readonly usersService: UsersService,
+        @Inject('TokenService')
         private readonly tokenService: TokenService,
     ) {}
 
