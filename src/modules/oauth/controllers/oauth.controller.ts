@@ -22,7 +22,7 @@ export class OauthController {
         @Res({ passthrough: true }) res: Response,
     ): Promise<LoginResponse> {
         const result = await this.oauthService.oauthCallback(provider, code);
-        
+
         // Set refresh token cookie (same as regular login)
         res.cookie('refreshToken', result.refreshToken.token, {
             httpOnly: true,
@@ -30,7 +30,7 @@ export class OauthController {
             sameSite: 'strict',
             path: '/',
         });
-        
+
         return AuthMapper.toLoginResponse({
             code: 200, message: 'OAuth login successful',
         }, result);

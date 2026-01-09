@@ -16,4 +16,5 @@ export enum ErrorType {
     MISSING_API_KEY = 'missing_api_key',
     INVALID_REQUEST = 'invalid_request',
     OAUTH_AUTHENTICATION_FAILED = 'oauth_authentication_failed',
+    PRIMARY_EMAIL = 'primary_email',
 }

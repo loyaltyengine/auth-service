@@ -1,3 +1,4 @@
-import { Prisma } from 'src/generated/prisma/client';
-
-export type UpdateUserDto = Prisma.UserUpdateInput;
+export interface UpdateUserDto {
+    firstName?: string;
+    lastName?: string;
+}

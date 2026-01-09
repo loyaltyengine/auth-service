@@ -3,21 +3,20 @@ import { OauthFactoryService } from './oauth-factory.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
 import { TokenService } from 'src/modules/tokens/services/token.service';
-import { UsersService } from 'src/modules/users/services/users.service';
 import type { IOauthRepository } from '../repositories/oauth-repository.interface';
 import { LoginResultDto } from 'src/modules/auth/dto/login-result.dto';
 import { createJti } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
 import { UserDto } from 'src/modules/users/dto/user.dto';
-import type { IUsersService } from 'src/modules/users/services/users.service.interface';
+import type { UsersService } from 'src/modules/users/services/users-service.interface';
 
 @Injectable()
 export class OauthService implements IOauthService {
     constructor(
         private readonly oauthFactoryService: OauthFactoryService,
-        @Inject('IUsersService')
-        private readonly usersService: IUsersService,
+        @Inject('UsersService')
+        private readonly usersService: UsersService,
         private readonly tokenService: TokenService,
         @Inject('IOauthRepository')
         private readonly oauthRepository: IOauthRepository,
@@ -45,6 +44,7 @@ export class OauthService implements IOauthService {
                     // Both OAuth account and email do not exist, create new user
                     user = await this.usersService.createUser({
                         email: userProfile.email,
+                        isEmailPrimary: true,
                         firstName: userProfile.firstName,
                         lastName: userProfile.lastName,
                         isEmailVerified: userProfile.isEmailVerified,

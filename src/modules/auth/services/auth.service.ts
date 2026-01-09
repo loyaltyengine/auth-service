@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IAuthService } from './auth-service.interface';
+import { AuthService } from './auth-service.interface';
 import { LoginUserDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { LoginResultDto } from '../dto/login-result.dto';
-import type { IUsersService } from 'src/modules/users/services/users.service.interface';
+import type { UsersService } from 'src/modules/users/services/users-service.interface';
 import { createJti, verifyHashedValue } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { RegisterResultDto } from '../dto/register-result.dto';
@@ -12,10 +12,10 @@ import { ErrorType } from 'src/shared/enums/error-type.enum';
 import { RefreshResultDto } from '../dto/refresh-result.dto';
 
 @Injectable()
-export class AuthService implements IAuthService {
+export class AuthServiceImpl implements AuthService {
     constructor(
-        @Inject('IUsersService')
-        private readonly usersService: IUsersService,
+        @Inject('UsersService')
+        private readonly usersService: UsersService,
         private readonly tokenService: TokenService,
     ) {}
 

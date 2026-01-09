@@ -43,7 +43,7 @@ model RefreshToken {
   jti        String   @unique
   tokenHash  String   @map("token_hash")
   userId     String   @map("user_id")
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt  DateTime @map("expires_at")
   revoked    Boolean  @default(false)
   revokedAt  DateTime? @map("revoked_at")
@@ -57,7 +57,7 @@ model OauthAccount {
   provider     String
   providerId   String   @map("provider_id")
   userId       String   @map("user_id")
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now()) @map("created_at")
 
   @@unique([provider, providerId])
