@@ -28,9 +28,10 @@ export class AuthGuard implements CanActivate {
             // To make sure the user still exists or active
             await this.usersService.getActiveUserById(payload.userId);
         }
+        // Attach user data and the actual token to request object
+        request['user'] = { userId: payload.userId, email: payload.email };
+        request['accessToken'] = token;
 
-        request['user'] = payload;
-        request['token'] = token;
         return true;
     }
 }
