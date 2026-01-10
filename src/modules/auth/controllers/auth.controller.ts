@@ -23,7 +23,7 @@ import type { AuthService } from '../services/auth-service.interface';
 
 @Controller('auth/v1')
 export class AuthController {
-    constructor(@Inject('AuthService') private readonly authService: AuthService) {}
+    constructor(@Inject('AuthService') private readonly authService: AuthService) { }
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
@@ -33,9 +33,8 @@ export class AuthController {
             email: request.email,
             password: request.password,
         });
-
+        // Set the refresh token cookie
         res.cookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken.token, REFRESH_TOKEN_COOKIE_OPTIONS);
-
         return AuthMapper.toLoginResponse({ code: 200, message: 'Login successful' }, result);
     }
 
@@ -49,6 +48,7 @@ export class AuthController {
             firstName: request.firstName,
             lastName: request.lastName,
         });
+
         return AuthMapper.toRegisterResponse({ code: HttpStatus.CREATED, message: 'Registration successful' }, result);
     }
 
@@ -59,7 +59,7 @@ export class AuthController {
         @Res({ passthrough: true }) res: Response,
     ): Promise<RefreshResponse> {
         const result = await this.authService.refreshToken(token);
-
+        // Set a new refresh token cookie
         res.cookie(REFRESH_TOKEN_COOKIE_NAME, result.refreshToken.token, REFRESH_TOKEN_COOKIE_OPTIONS);
 
         return AuthMapper.toRefreshResponse({ code: HttpStatus.OK, message: 'Token refreshed successfully' }, result);
@@ -73,10 +73,9 @@ export class AuthController {
         @RefreshToken() refreshToken: string,
         @Res({ passthrough: true }) res: Response,
     ): Promise<ApiResponse> {
-        const accessToken = request['token'];
-
+        const accessToken = request['accessToken'];
         await this.authService.logout(accessToken, refreshToken);
-
+        // Clear the refresh token cookie
         res.clearCookie(REFRESH_TOKEN_COOKIE_NAME, {
             path: REFRESH_TOKEN_COOKIE_PATH,
         });
