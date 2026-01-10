@@ -22,7 +22,7 @@ export class AuthServiceImpl implements AuthService {
 
     async login(loginInfo: LoginUserDto): Promise<LoginResultDto> {
         const passwordUser = await this.usersService.findUserByEmailWithPassword(loginInfo.email);
-        if (!passwordUser || !passwordUser.password || !(await verifyHashedValue(loginInfo.password, passwordUser.password))) {
+        if (!passwordUser?.password || !(await verifyHashedValue(loginInfo.password, passwordUser.password))) {
             throw new AuthenticationException(
                 'Authentication failed',
                 ErrorType.INVALID_CREDENTIALS,
@@ -58,8 +58,7 @@ export class AuthServiceImpl implements AuthService {
         });
 
         return {
-            user: createdUser,
-            accessToken: 'accessToken',
+            user: createdUser
         };
     }
 
