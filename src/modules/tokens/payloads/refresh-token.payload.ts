@@ -1,4 +1,4 @@
-export class RefreshTokenPayloadDto {
+export class RefreshTokenPayload {
     userId: string;
     jti: string;
 }
