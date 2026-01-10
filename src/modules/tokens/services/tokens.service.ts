@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { TokenService } from './token-service.interface';
+import { TokensService } from './tokens-service.interface';
 import { AccessTokenDto } from '../dto/access-token.dto';
-import { AccessTokenPayloadDto } from '../dto/access-token-payload.dto';
+import { AccessTokenPayload } from '../payloads/access-token.payload';
 import { JwtService } from '@nestjs/jwt';
 import {
     ACCESS_TOKEN_EXPIRES_IN,
@@ -15,19 +15,19 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import type { TokensRepository } from '../repositories/tokens-repository.interface';
 import { createJti, hashValue, verifyHashedValue } from 'src/shared/utils';
-import { RefreshTokenPayloadDto } from '../dto/refresh-token-payload.dto';
+import { RefreshTokenPayload } from '../payloads/refresh-token.payload';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
 
 @Injectable()
-export class TokenServiceImpl implements TokenService {
+export class TokensServiceImpl implements TokensService {
     constructor(
         private readonly jwtService: JwtService,
         @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
         @Inject('TokensRepository') private readonly tokensRepository: TokensRepository,
-    ) {}
+    ) { }
 
-    async signAccessToken(payload: AccessTokenPayloadDto): Promise<AccessTokenDto> {
+    async signAccessToken(payload: AccessTokenPayload): Promise<AccessTokenDto> {
         const signedToken = await this.jwtService.signAsync(payload, {
             secret: ACCESS_TOKEN_SECRET,
             expiresIn: ACCESS_TOKEN_EXPIRES_IN,
@@ -39,7 +39,7 @@ export class TokenServiceImpl implements TokenService {
         };
     }
 
-    async signRefreshToken(payload: RefreshTokenPayloadDto): Promise<RefreshTokenDto> {
+    async signRefreshToken(payload: RefreshTokenPayload): Promise<RefreshTokenDto> {
         // Sign the refresh token
         const refreshToken = await this.jwtService.signAsync(payload, {
             secret: REFRESH_TOKEN_SECRET,
@@ -50,9 +50,7 @@ export class TokenServiceImpl implements TokenService {
         await this.tokensRepository.createRefreshToken({
             jti: payload.jti,
             tokenHash: await hashValue(refreshToken),
-            user: {
-                connect: { id: payload.userId },
-            },
+            userId: payload.userId,
             expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRES_IN * MILLISECONDS_PER_SECOND),
         });
 
@@ -63,7 +61,7 @@ export class TokenServiceImpl implements TokenService {
         };
     }
 
-    async rotateRefreshToken(payload: RefreshTokenPayloadDto): Promise<RefreshTokenDto> {
+    async rotateRefreshToken(payload: RefreshTokenPayload): Promise<RefreshTokenDto> {
         // Revoke the old refresh token
         await this.tokensRepository.updateRefreshToken(payload.jti, {
             revoked: true,
@@ -82,7 +80,7 @@ export class TokenServiceImpl implements TokenService {
         };
     }
 
-    async verifyAccessToken(token: string): Promise<AccessTokenPayloadDto> {
+    async verifyAccessToken(token: string): Promise<AccessTokenPayload> {
         // Check if token is blacklisted
         const blacklistKey = `blacklist:${token}`;
         const isBlacklisted = await this.cacheManager.get(blacklistKey);
@@ -97,7 +95,7 @@ export class TokenServiceImpl implements TokenService {
 
         try {
             // Verify the token
-            const payload = await this.jwtService.verifyAsync<AccessTokenPayloadDto>(token, {
+            const payload = await this.jwtService.verifyAsync<AccessTokenPayload>(token, {
                 secret: ACCESS_TOKEN_SECRET,
             });
 
@@ -114,7 +112,7 @@ export class TokenServiceImpl implements TokenService {
     async revokeAccessToken(token: string): Promise<void> {
         try {
             // Already verified by the Auth guard
-            const payload = this.jwtService.decode<AccessTokenPayloadDto>(token);
+            const payload = this.jwtService.decode<AccessTokenPayload>(token);
 
             if (payload?.exp) {
                 // Add to blacklist until token it expires
@@ -133,7 +131,7 @@ export class TokenServiceImpl implements TokenService {
 
     async revokeRefreshToken(token: string): Promise<void> {
         try {
-            const payload = this.jwtService.decode<RefreshTokenPayloadDto>(token);
+            const payload = this.jwtService.decode<RefreshTokenPayload>(token);
             // Revoke in database
             await this.tokensRepository.updateRefreshToken(payload.jti, {
                 revoked: true,
@@ -144,9 +142,9 @@ export class TokenServiceImpl implements TokenService {
         }
     }
 
-    async verifyRefreshToken(token: string): Promise<RefreshTokenPayloadDto> {
+    async verifyRefreshToken(token: string): Promise<RefreshTokenPayload> {
         try {
-            const payload = await this.jwtService.verifyAsync<RefreshTokenPayloadDto>(token, {
+            const payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(token, {
                 secret: REFRESH_TOKEN_SECRET,
             });
 

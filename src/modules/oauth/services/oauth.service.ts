@@ -2,7 +2,6 @@ import { IOauthService } from './oauth-service.interface';
 import { OauthFactoryService } from './oauth-factory.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
-import { TokenService } from 'src/modules/tokens/services/token.service';
 import type { IOauthRepository } from '../repositories/oauth-repository.interface';
 import { LoginResultDto } from 'src/modules/auth/dto/login-result.dto';
 import { createJti } from 'src/shared/utils';
@@ -10,6 +9,7 @@ import { AuthenticationException } from 'src/shared/exceptions/authentication.ex
 import { ErrorType } from 'src/shared/enums/error-type.enum';
 import { UserDto } from 'src/modules/users/dto/user.dto';
 import type { UsersService } from 'src/modules/users/services/users-service.interface';
+import type { TokensService } from 'src/modules/tokens/services/tokens-service.interface';
 
 @Injectable()
 export class OauthService implements IOauthService {
@@ -17,7 +17,8 @@ export class OauthService implements IOauthService {
         private readonly oauthFactoryService: OauthFactoryService,
         @Inject('UsersService')
         private readonly usersService: UsersService,
-        private readonly tokenService: TokenService,
+        @Inject('TokensService')
+        private readonly tokensService: TokensService,
         @Inject('IOauthRepository')
         private readonly oauthRepository: IOauthRepository,
     ) { }
@@ -55,12 +56,12 @@ export class OauthService implements IOauthService {
             }
 
             // Generate application tokens
-            const accessToken = await this.tokenService.signAccessToken({
+            const accessToken = await this.tokensService.signAccessToken({
                 userId: user.id,
                 email: user.primaryEmail,
                 jti: createJti(),
             });
-            const refreshTokenResult = await this.tokenService.signRefreshToken({
+            const refreshTokenResult = await this.tokensService.signRefreshToken({
                 userId: user.id,
                 jti: createJti(),
             });

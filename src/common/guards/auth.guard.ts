@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
-import type { TokenService } from 'src/modules/tokens/services/token-service.interface';
+import { AccessTokenPayload } from 'src/modules/tokens/payloads/access-token.payload';
+import type { TokensService } from 'src/modules/tokens/services/tokens-service.interface';
 import type { UsersService } from 'src/modules/users/services/users-service.interface';
 import { extractTokenFromHeader } from 'src/shared/utils';
 
@@ -8,17 +9,18 @@ export class AuthGuard implements CanActivate {
     private readonly REACTIVATE_PATH = 'me/reactivate';
 
     constructor(
-        @Inject('TokenService')
-        private readonly tokenService: TokenService,
+        @Inject('TokensService')
+        private readonly tokensService: TokensService,
         @Inject('UsersService') private readonly usersService: UsersService
     ) { }
+
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         // The extractTokenFromHeader function will throw if token is missing
         const token = extractTokenFromHeader(request);
         // verify token
-        const payload = await this.tokenService.verifyAccessToken(token);
+        const payload: AccessTokenPayload = await this.tokensService.verifyAccessToken(token);
 
         // Skip active user check for reactivate endpoint
         const path = request.path || request.url;

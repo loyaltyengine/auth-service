@@ -1,4 +1,4 @@
-export class AccessTokenPayloadDto {
+export class AccessTokenPayload {
     userId: string;
     email: string;
     jti: string;

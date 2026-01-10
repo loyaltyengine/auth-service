@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { TokenServiceImpl } from './services/token.service';
+import { TokensServiceImpl } from './services/tokens.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ACCESS_TOKEN_EXPIRES_IN, JWT_SECRET } from 'src/shared/constants';
 import { PrismaTokensRepository } from './repositories/prisma-tokens.repository';
@@ -15,14 +15,14 @@ import { PrismaTokensRepository } from './repositories/prisma-tokens.repository'
     ],
     providers: [
         {
-            provide: 'TokenService',
-            useClass: TokenServiceImpl,
+            provide: 'TokensService',
+            useClass: TokensServiceImpl,
         },
         {
             provide: 'TokensRepository',
             useClass: PrismaTokensRepository,
         },
     ],
-    exports: ['TokenService'],
+    exports: ['TokensService'],
 })
 export class TokensModule { }

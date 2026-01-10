@@ -9,15 +9,15 @@ import { AuthenticationException } from 'src/shared/exceptions/authentication.ex
 import { RegisterResultDto } from '../dto/register-result.dto';
 import { ErrorType } from 'src/shared/enums/error-type.enum';
 import { RefreshResultDto } from '../dto/refresh-result.dto';
-import type { TokenService } from 'src/modules/tokens/services/token-service.interface';
+import type { TokensService } from 'src/modules/tokens/services/tokens-service.interface';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
     constructor(
         @Inject('UsersService')
         private readonly usersService: UsersService,
-        @Inject('TokenService')
-        private readonly tokenService: TokenService,
+        @Inject('TokensService')
+        private readonly tokensService: TokensService,
     ) {}
 
     async login(loginInfo: LoginUserDto): Promise<LoginResultDto> {
@@ -31,12 +31,12 @@ export class AuthServiceImpl implements AuthService {
         }
         const { password, ...user } = passwordUser;
 
-        const accessToken = await this.tokenService.signAccessToken({
+        const accessToken = await this.tokensService.signAccessToken({
             userId: user.id,
             email: user.primaryEmail,
             jti: createJti(),
         });
-        const refreshToken = await this.tokenService.signRefreshToken({
+        const refreshToken = await this.tokensService.signRefreshToken({
             userId: user.id,
             jti: createJti(),
         });
@@ -64,16 +64,16 @@ export class AuthServiceImpl implements AuthService {
     }
 
     async logout(accessToken: string, refreshToken: string): Promise<void> {
-        await this.tokenService.revokeAccessToken(accessToken);
-        await this.tokenService.revokeRefreshToken(refreshToken);
+        await this.tokensService.revokeAccessToken(accessToken);
+        await this.tokensService.revokeRefreshToken(refreshToken);
     }
 
     async refreshToken(refreshToken: string): Promise<RefreshResultDto> {
-        const payload = await this.tokenService.verifyRefreshToken(refreshToken);
+        const payload = await this.tokensService.verifyRefreshToken(refreshToken);
         const user = await this.usersService.getActiveUserById(payload.userId);
 
-        const newRefreshToken = await this.tokenService.rotateRefreshToken(payload);
-        const newAccessToken = await this.tokenService.signAccessToken({
+        const newRefreshToken = await this.tokensService.rotateRefreshToken(payload);
+        const newAccessToken = await this.tokensService.signAccessToken({
             userId: user.id,
             email: user.primaryEmail,
             jti: createJti(),
