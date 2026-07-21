@@ -1,16 +1,17 @@
 import { PropertiesService } from 'src/modules/properties/services/properties.service';
 import { ApiKeyDto } from '../dto/api-key.dto';
-import { IApiKeyService } from './api-keys-service.interface';
-import { BadRequestException } from 'src/shared/exceptions/bad-request.exception';
-import { ErrorType } from 'src/shared/enums/error-type.enum';
+import { ApiKeyService } from './api-keys-service.interface';
+import { ErrorType } from '@loyalty-engine/auth-v1-types';
 import type { IApiKeysRepository } from '../repositories/api-keys-repository.interface';
 import { Inject, Injectable } from '@nestjs/common';
 import * as crypto from 'node:crypto';
 import { hashValue, verifyHashedValue, createFingerprint } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
+import { ForbiddenException } from 'src/shared/exceptions/forbidden.exception';
+import { ConflictException } from 'src/shared/exceptions/conflict.exception';
 
 @Injectable()
-export class ApiKeysService implements IApiKeyService {
+export class ApiKeysServiceImpl implements ApiKeyService {
     constructor(
         private readonly propertiesService: PropertiesService,
         @Inject('IApiKeysRepository')
@@ -21,9 +22,9 @@ export class ApiKeysService implements IApiKeyService {
         // Verify that the user owns the property
         const ownsProperty = await this.propertiesService.validatePropertyOwnership(propertyId, userId);
         if (!ownsProperty) {
-            throw new BadRequestException(
+            throw new ForbiddenException(
                 `User with ID ${userId} does not own property with ID ${propertyId}`,
-                ErrorType.VALIDATION_ERROR,
+                ErrorType.ForbiddenError,
                 'Cannot create API key for property not owned by user.',
             );
         }
@@ -59,9 +60,9 @@ export class ApiKeysService implements IApiKeyService {
             }
         }
 
-        throw new BadRequestException(
+        throw new ConflictException(
             `Failed to create unique API key after ${MAX_ATTEMPTS} attempts`,
-            ErrorType.CONFLICT_ERROR,
+            ErrorType.ConflictError,
             'Could not generate a unique API key. Please try again later.',
         );
     }
@@ -72,7 +73,7 @@ export class ApiKeysService implements IApiKeyService {
         if (!apiKey || !apiKey.isActive || !(await verifyHashedValue(key, apiKey.key))) {
             throw new AuthenticationException(
                 'API key authentication failed: Invalid API key',
-                ErrorType.INVALID_API_KEY,
+                ErrorType.InvalidApiKey,
                 'The provided API key is invalid',
             );
         }
@@ -84,7 +85,7 @@ export class ApiKeysService implements IApiKeyService {
         if (!apiKey) {
             throw new AuthenticationException(
                 'Cannot deactivate API key: Key not found',
-                ErrorType.INVALID_API_KEY,
+                ErrorType.InvalidApiKey,
                 'The provided API key does not exist',
             );
         }

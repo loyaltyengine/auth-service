@@ -1,8 +1,8 @@
 import { ErrorType } from '@loyalty-engine/auth-v1-types';
 import { ApiException } from './api.exception';
 
-export class NotFoundException extends ApiException {
+export class ConflictException extends ApiException {
     constructor(message: string, error: ErrorType, description: string) {
-        super(404, message, error, description);
+        super(409, message, error, description);
     }
 }

@@ -1,4 +1,4 @@
-import { ErrorType } from '../enums/error-type.enum';
+import { ErrorType } from '@loyalty-engine/auth-v1-types';
 import { ApiException } from './api.exception';
 
 export class AuthenticationException extends ApiException {

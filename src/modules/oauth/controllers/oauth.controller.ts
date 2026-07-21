@@ -1,12 +1,12 @@
 import { Controller, Get, Param, Post, Query, Res } from '@nestjs/common';
 import type { Response } from 'express';
-import { OauthService } from '../services/oauth.service';
-import { LoginResponse } from 'src/generated/loyaltyengine/auth/v1';
+import { OauthServiceImpl } from '../services/oauth.service';
+import { LoginResponse } from '@loyalty-engine/auth-v1-types';
 import { AuthMapper } from 'src/modules/auth/mappers/auth.mapper';
 
 @Controller('auth/v1/oauth/')
 export class OauthController {
-    constructor(private readonly oauthService: OauthService) { }
+    constructor(private readonly oauthService: OauthServiceImpl) { }
 
     @Get(':provider/login')
     async oauthLogin(@Param('provider') provider: string, @Res() res: Response): Promise<void> {

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { RegisterRequest } from 'src/generated/loyaltyengine/auth/v1';
+import { RegisterRequest } from '@loyalty-engine/auth-v1-types';
 import {
     EMAIL_VALIDATION,
     FIRST_NAME_VALIDATION,

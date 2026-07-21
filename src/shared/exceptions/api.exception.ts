@@ -1,14 +1,14 @@
 import { HttpException } from '@nestjs/common';
-import { ErrorType } from '../enums/error-type.enum';
+import {ErrorDetail, ErrorType } from '@loyalty-engine/auth-v1-types';
 
 export abstract class ApiException extends HttpException {
     code: number;
     message: string;
     error: ErrorType;
     description: string;
-    details?: ErrorDetails[];
+    details?: ErrorDetail[];
 
-    constructor(code: number, message: string, error: ErrorType, description: string, details?: ErrorDetails[]) {
+    constructor(code: number, message: string, error: ErrorType, description: string, details?: ErrorDetail[]) {
         super(message, code);
         this.error = error;
         this.description = description;
