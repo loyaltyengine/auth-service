@@ -8,15 +8,15 @@ import { UsersModule } from '../users/users.module';
 import { OauthServiceImpl } from './services/oauth.service';
 
 @Module({
-  imports: [UsersModule],
-  controllers: [OauthController],
-  providers: [
-    OauthServiceImpl,
-    OauthFactoryService,
-    GoogleOauthStrategy,
-    GithubOauthStrategy,
-    { provide: 'OauthRepository', useClass: OauthPrismaRepository },
-  ],
-  exports: [OauthServiceImpl, OauthFactoryService],
+    imports: [UsersModule],
+    controllers: [OauthController],
+    providers: [
+        { provide: 'OauthService', useClass: OauthServiceImpl },
+        OauthFactoryService,
+        GoogleOauthStrategy,
+        GithubOauthStrategy,
+        { provide: 'OauthRepository', useClass: OauthPrismaRepository },
+    ],
+    exports: [OauthServiceImpl, OauthFactoryService],
 })
 export class OauthModule {}
