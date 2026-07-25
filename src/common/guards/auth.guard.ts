@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
         // The extractTokenFromHeader function will throw if token is missing
         const token = extractTokenFromHeader(request);
         // verify token
-        const payload: AccessTokenPayload = await this.tokensService.verifyAccessToken(token);
+        const payload = await this.tokensService.verifyAccessToken(token);
 
         // Skip active user check for reactivate endpoint
         const path = request.path || request.url;
