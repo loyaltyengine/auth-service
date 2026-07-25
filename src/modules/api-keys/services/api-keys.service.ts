@@ -2,8 +2,8 @@ import { PropertiesService } from 'src/modules/properties/services/properties.se
 import { ApiKeyDto } from '../dto/api-key.dto';
 import { ApiKeyService } from './api-keys-service.interface';
 import { ErrorType } from '@loyalty-engine/auth-v1-types';
-import type { IApiKeysRepository } from '../repositories/api-keys-repository.interface';
-import { Inject, Injectable } from '@nestjs/common';
+import type { ApiKeysRepository } from '../repositories/api-keys-repository.interface';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'node:crypto';
 import { hashValue, verifyHashedValue, createFingerprint } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
@@ -12,13 +12,16 @@ import { ConflictException } from 'src/shared/exceptions/conflict.exception';
 
 @Injectable()
 export class ApiKeysServiceImpl implements ApiKeyService {
+    private readonly logger = new Logger(ApiKeysServiceImpl.name);
+
     constructor(
         private readonly propertiesService: PropertiesService,
-        @Inject('IApiKeysRepository')
-        private readonly apiKeysRepository: IApiKeysRepository,
+        @Inject('ApiKeysRepository')
+        private readonly apiKeysRepository: ApiKeysRepository,
     ) {}
 
     async createApiKey(propertyId: string, userId: string, name?: string): Promise<ApiKeyDto> {
+        this.logger.log('Creating API key for property: ' + propertyId + ' by user: ' + userId);
         // Verify that the user owns the property
         const ownsProperty = await this.propertiesService.validatePropertyOwnership(propertyId, userId);
         if (!ownsProperty) {
@@ -53,6 +56,7 @@ export class ApiKeysServiceImpl implements ApiKeyService {
             } catch (err: any) {
                 // See: https://www.prisma.io/docs/orm/reference/error-reference
                 if (err?.code === 'P2002' && attempt < MAX_ATTEMPTS) {
+                    this.logger.log(`Collision detected on attempt ${attempt}, retrying...`);
                     console.log(`Collision detected on attempt ${attempt}, retrying...`);
                     continue;
                 }

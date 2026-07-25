@@ -8,7 +8,7 @@ import { ApiKeysPrismaRepository } from './repositories/api-keys.repository';
 @Module({
     imports: [PropertiesModule],
     controllers: [ApiKeysController],
-    providers: [{ provide: 'ApiKeysService', useClass: ApiKeysServiceImpl }, { provide: 'IApiKeysRepository', useClass: ApiKeysPrismaRepository }, PrismaService],
+    providers: [{ provide: 'ApiKeysService', useClass: ApiKeysServiceImpl }, { provide: 'ApiKeysRepository', useClass: ApiKeysPrismaRepository }, PrismaService],
     exports: ['ApiKeysService'],
 })
 export class ApiKeysModule {}
