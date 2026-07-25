@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { IOauthStrategy } from './oauth-strategy.interface';
+import { OauthStrategy } from './oauth-strategy.interface';
 import { OauthUserDto } from '../dto/oauth-user.dto';
 
 @Injectable()
-export class GithubOauthStrategy implements IOauthStrategy {
+export class GithubOauthStrategy implements OauthStrategy {
     getProviderAuthUrl(state: string): string {
         throw new Error('Method not implemented.');
     }

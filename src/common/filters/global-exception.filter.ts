@@ -1,6 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 import { Response } from 'express';
-import { ErrorResponse, ErrorType as Error, ErrorDetail, ErrorType } from '@loyalty-engine/auth-v1-types';
+import { ErrorResponse, ErrorType, ErrorDetail } from '@loyalty-engine/auth-v1-types';
 import { ApiException } from 'src/shared/exceptions/api.exception';
 
 @Catch()
@@ -47,7 +47,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
                 code: status,
                 message: message,
             },
-            error: error as Error,
+            error: error,
             description: description,
             details: details,
         };

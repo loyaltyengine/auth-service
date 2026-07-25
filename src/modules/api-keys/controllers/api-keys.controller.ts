@@ -2,11 +2,11 @@ import { Controller, Post, Req, UseGuards, Param, HttpCode, HttpStatus, Body, In
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import type { Response as ApiResponse, CreateApiKeyRequest, CreateApiKeyResponse } from '@loyalty-engine/auth-v1-types';
 import { extractApiKeyFromHeader } from 'src/shared/utils';
-import type { ApiKeyService } from '../services/api-keys-service.interface';
+import type { ApiKeysService } from '../services/api-keys-service.interface';
 
 @Controller('auth/v1/')
 export class ApiKeysController {
-    constructor(@Inject('ApiKeyService') private readonly apiKeysService: ApiKeyService) {}
+    constructor(@Inject('ApiKeysService') private readonly apiKeysService: ApiKeysService) {}
 
     @Post('properties/:propertyId/api-keys')
     @UseGuards(AuthGuard)

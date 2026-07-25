@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { UsersService } from './users-service.interface';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserDto } from '../dto/user.dto';
@@ -7,7 +7,7 @@ import { BadRequestException } from 'src/shared/exceptions/bad-request.exception
 import { hashValue } from 'src/shared/utils';
 import { PasswordUserDto } from '../dto/password-user.dto';
 import { UserMapper } from '../mappers/user.mapper';
-import { ErrorType } from '@loyalty-engine/auth-v1-types' ;
+import { ErrorType } from '@loyalty-engine/auth-v1-types';
 import { NotFoundException } from 'src/shared/exceptions/not-found.exception';
 import { EmailDto } from '../dto/email.dto';
 import { MakePrimaryEmailResultDto } from '../dto/make-primary-email-result.dto';
@@ -22,6 +22,7 @@ export class UsersServiceImpl implements UsersService {
 
     private readonly INACTIVE_USER_MGS = 'Inactive user';
     private readonly INACTIVE_USER_DESC = 'The user account is inactive.';
+    private readonly logger = new Logger(UsersServiceImpl.name);
 
     constructor(
         @Inject('UsersRepository')
@@ -29,6 +30,7 @@ export class UsersServiceImpl implements UsersService {
     ) { }
 
     async createUser(user: CreateUserDto): Promise<UserDto> {
+        this.logger.log('Creating a new user: ' + user.email);
         if (await this.usersRepository.emailExists(user.email)) {
             throw new BadRequestException('Bad request', ErrorType.EmailAlreadyExists, 'Email already in use');
         }
@@ -48,6 +50,7 @@ export class UsersServiceImpl implements UsersService {
     }
 
     async updateUser(userId: string, updates: UpdateUserDto): Promise<UserDto> {
+        this.logger.log('Updating user: ' + userId);
         const updateData: UpdateUserData = {
             firstName: updates.firstName,
             lastName: updates.lastName,
@@ -129,7 +132,11 @@ export class UsersServiceImpl implements UsersService {
     async makePrimaryEmail(userId: string, emailId: string): Promise<MakePrimaryEmailResultDto> {
         const existingEmail = await this.usersRepository.findEmailByIdAndUserId(emailId, userId);
         if (!existingEmail) {
-            throw new NotFoundException('Email not found', ErrorType.NotFound, 'The specified email does not exist for the user');
+            throw new NotFoundException(
+                'Email not found',
+                ErrorType.NotFound,
+                'The specified email does not exist for the user',
+            );
         }
 
         const oldPrimaryEmail = await this.usersRepository.findPrimaryEmailByUserId(userId);
@@ -162,9 +169,13 @@ export class UsersServiceImpl implements UsersService {
         const email = await this.usersRepository.findEmailByIdAndUserId(emailId, userId);
         if (email) {
             if (email.isPrimary) {
-                throw new BadRequestException('Cannot delete primary email', ErrorType.PrimaryEmail, 'Primary email cannot be deleted. Change primary email before deletion.');
+                throw new BadRequestException(
+                    'Cannot delete primary email',
+                    ErrorType.PrimaryEmail,
+                    'Primary email cannot be deleted. Change primary email before deletion.',
+                );
             }
-            await this.usersRepository.deleteEmailById(userId, emailId);
+            await this.usersRepository.deleteEmailById(email.userId, email.id);
         }
     }
 
@@ -172,5 +183,4 @@ export class UsersServiceImpl implements UsersService {
         const emails = await this.usersRepository.retrieveEmailsByUserId(userId);
         return emails.map(UserMapper.toEmailDto);
     }
-
 }

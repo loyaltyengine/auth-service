@@ -17,6 +17,6 @@ import { OauthServiceImpl } from './services/oauth.service';
         GithubOauthStrategy,
         { provide: 'OauthRepository', useClass: OauthPrismaRepository },
     ],
-    exports: [OauthServiceImpl, OauthFactoryService],
+    exports: ['OauthService', OauthFactoryService],
 })
 export class OauthModule {}

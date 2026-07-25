@@ -1,6 +1,6 @@
 import { PropertiesService } from 'src/modules/properties/services/properties.service';
 import { ApiKeyDto } from '../dto/api-key.dto';
-import { ApiKeyService } from './api-keys-service.interface';
+import { ApiKeysService } from './api-keys-service.interface';
 import { ErrorType } from '@loyalty-engine/auth-v1-types';
 import type { ApiKeysRepository } from '../repositories/api-keys-repository.interface';
 import { Inject, Injectable, Logger } from '@nestjs/common';
@@ -11,7 +11,7 @@ import { ForbiddenException } from 'src/shared/exceptions/forbidden.exception';
 import { ConflictException } from 'src/shared/exceptions/conflict.exception';
 
 @Injectable()
-export class ApiKeysServiceImpl implements ApiKeyService {
+export class ApiKeysServiceImpl implements ApiKeysService {
     private readonly logger = new Logger(ApiKeysServiceImpl.name);
 
     constructor(
