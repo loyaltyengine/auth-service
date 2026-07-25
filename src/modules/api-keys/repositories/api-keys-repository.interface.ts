@@ -1,9 +1,9 @@
-import { CreateApiKeyDto } from '../dto/create-api-key.dto';
-import { UpdateApiKeyDto } from '../dto/update-api-key.dto';
 import { ApiKeyModel } from '../models/api-key.model';
+import { CreateApiKeyData } from './types/create-api-key.data';
+import { UpdateApiKeyData } from './types/update-api-key.data';
 
-export interface IApiKeysRepository {
-    createApiKey(apiKey: CreateApiKeyDto): Promise<ApiKeyModel>;
-    updateApiKey(fingerprint: string, updates: UpdateApiKeyDto): Promise<void>;
+export interface ApiKeysRepository {
+    createApiKey(apiKey: CreateApiKeyData): Promise<ApiKeyModel>;
+    updateApiKey(fingerprint: string, updates: UpdateApiKeyData): Promise<void>;
     findApiKeyByKey(key: string): Promise<ApiKeyModel | null>;
 }

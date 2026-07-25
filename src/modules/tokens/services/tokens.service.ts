@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { TokensService } from './tokens-service.interface';
 import { AccessTokenDto } from '../dto/access-token.dto';
 import { AccessTokenPayload } from '../payloads/access-token.payload';
@@ -17,10 +17,12 @@ import type { TokensRepository } from '../repositories/tokens-repository.interfa
 import { createJti, hashValue, verifyHashedValue } from 'src/shared/utils';
 import { RefreshTokenPayload } from '../payloads/refresh-token.payload';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
-import { ErrorType } from 'src/shared/enums/error-type.enum';
+import { ErrorType } from '@loyalty-engine/auth-v1-types';
 
 @Injectable()
 export class TokensServiceImpl implements TokensService {
+    private readonly logger = new Logger(TokensServiceImpl.name);
+
     constructor(
         private readonly jwtService: JwtService,
         @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
@@ -28,6 +30,7 @@ export class TokensServiceImpl implements TokensService {
     ) { }
 
     async signAccessToken(payload: AccessTokenPayload): Promise<AccessTokenDto> {
+        this.logger.log('Sign access token for user: ' + payload.email);
         const signedToken = await this.jwtService.signAsync(payload, {
             secret: ACCESS_TOKEN_SECRET,
             expiresIn: ACCESS_TOKEN_EXPIRES_IN,
@@ -40,6 +43,7 @@ export class TokensServiceImpl implements TokensService {
     }
 
     async signRefreshToken(payload: RefreshTokenPayload): Promise<RefreshTokenDto> {
+        this.logger.log('Sign refresh token for user: ' + payload.userId);
         // Sign the refresh token
         const refreshToken = await this.jwtService.signAsync(payload, {
             secret: REFRESH_TOKEN_SECRET,
@@ -62,6 +66,7 @@ export class TokensServiceImpl implements TokensService {
     }
 
     async rotateRefreshToken(payload: RefreshTokenPayload): Promise<RefreshTokenDto> {
+        this.logger.log('Rotate refresh token for user: ' + payload.userId);
         // Revoke the old refresh token
         await this.tokensRepository.updateRefreshToken(payload.jti, {
             revoked: true,
@@ -88,7 +93,7 @@ export class TokensServiceImpl implements TokensService {
         if (isBlacklisted) {
             throw new AuthenticationException(
                 'Authentication failed: Token has been revoked',
-                ErrorType.INVALID_TOKEN,
+                ErrorType.InvalidToken,
                 'The provided token has been revoked',
             );
         }
@@ -103,7 +108,7 @@ export class TokensServiceImpl implements TokensService {
         } catch {
             throw new AuthenticationException(
                 'Authentication failed: Invalid token',
-                ErrorType.INVALID_TOKEN,
+                ErrorType.InvalidToken,
                 'The provided token is invalid or expired',
             );
         }
@@ -113,6 +118,7 @@ export class TokensServiceImpl implements TokensService {
         try {
             // Already verified by the Auth guard
             const payload = this.jwtService.decode<AccessTokenPayload>(token);
+            this.logger.log('Revoke access token for user: ' + payload.email);
 
             if (payload?.exp) {
                 // Add to blacklist until token it expires
@@ -132,6 +138,7 @@ export class TokensServiceImpl implements TokensService {
     async revokeRefreshToken(token: string): Promise<void> {
         try {
             const payload = this.jwtService.decode<RefreshTokenPayload>(token);
+            this.logger.log('Revoke refresh token for user: ' + payload.userId);
             // Revoke in database
             await this.tokensRepository.updateRefreshToken(payload.jti, {
                 revoked: true,
@@ -153,7 +160,7 @@ export class TokensServiceImpl implements TokensService {
             if (!dbToken || dbToken.revoked || !(await verifyHashedValue(token, dbToken.tokenHash))) {
                 throw new AuthenticationException(
                     'Refresh token failed',
-                    ErrorType.INVALID_TOKEN,
+                    ErrorType.InvalidToken,
                     'The provided refresh token is invalid or has been revoked',
                 );
             }
@@ -165,13 +172,14 @@ export class TokensServiceImpl implements TokensService {
             }
             throw new AuthenticationException(
                 'Refresh token failed',
-                ErrorType.INVALID_TOKEN,
+                ErrorType.InvalidToken,
                 'The provided refresh token is invalid or expired',
             );
         }
     }
 
     async deleteExpiredRefreshTokens(): Promise<void> {
+        this.logger.log('Delete expired refresh tokens');
         await this.tokensRepository.deleteRevokedOrExpiredTokens();
     }
 }

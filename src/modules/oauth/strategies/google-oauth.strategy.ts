@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { google } from 'googleapis';
-import { IOauthStrategy } from './oauth-strategy.interface';
+import { OauthStrategy } from './oauth-strategy.interface';
 import { OauthUserDto } from '../dto/oauth-user.dto';
 
 @Injectable()
-export class GoogleOauthStrategy implements IOauthStrategy {
+export class GoogleOauthStrategy implements OauthStrategy {
     private readonly oauth2Client;
 
     constructor(private readonly configService: ConfigService) {

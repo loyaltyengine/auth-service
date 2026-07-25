@@ -1,8 +1,7 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 import { Response } from 'express';
-import { ErrorResponse, ErrorType as Error } from 'src/generated/loyaltyengine/auth/v1/models';
-import { ErrorType } from 'src/shared/enums/error-type.enum';
-import { ApiException, ErrorDetails } from 'src/shared/exceptions/api.exception';
+import { ErrorResponse, ErrorType, ErrorDetail } from '@loyalty-engine/auth-v1-types';
+import { ApiException } from 'src/shared/exceptions/api.exception';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -30,7 +29,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
                 this.buildResponse(
                     500,
                     'Internal server error',
-                    ErrorType.INTERNAL_SERVER_ERROR,
+                    ErrorType.InternalServerError,
                     `${exception instanceof HttpException ? exception.message : 'An unexpected error occurred'}`,
                 ),
             );
@@ -41,14 +40,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message: string,
         error: ErrorType,
         description?: string,
-        details?: ErrorDetails[],
+        details?: ErrorDetail[],
     ): ErrorResponse {
         return {
             status: {
                 code: status,
                 message: message,
             },
-            error: error as Error,
+            error: error,
             description: description,
             details: details,
         };

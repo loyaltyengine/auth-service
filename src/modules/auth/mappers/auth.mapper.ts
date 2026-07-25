@@ -1,4 +1,4 @@
-import { LoginResponse, RefreshResponse, RegisterResponse } from 'src/generated/loyaltyengine/auth/v1';
+import { LoginResponse, RefreshResponse, RegisterResponse } from '@loyalty-engine/auth-v1-types';
 import { StatusDto } from 'src/shared/dto/status.dto';
 import { LoginResultDto } from '../dto/login-result.dto';
 import { RegisterResultDto } from '../dto/register-result.dto';

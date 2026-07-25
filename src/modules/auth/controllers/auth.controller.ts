@@ -7,7 +7,7 @@ import type {
     RefreshResponse,
     RegisterRequest,
     RegisterResponse,
-} from 'src/generated/loyaltyengine/auth/v1';
+} from '@loyalty-engine/auth-v1-types';
 import { AuthMapper } from '../mappers/auth.mapper';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
 import { loginRequestSchema } from '../validation/login.schema';

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GithubOauthStrategy } from '../strategies/github-oauth.strategy';
 import { GoogleOauthStrategy } from '../strategies/google-oauth.strategy';
 import { BadRequestException } from 'src/shared/exceptions/bad-request.exception';
-import { ErrorType } from 'src/shared/enums/error-type.enum';
+import { ErrorType } from '@loyalty-engine/auth-v1-types';
 
 @Injectable()
 export class OauthFactoryService {
@@ -20,7 +20,7 @@ export class OauthFactoryService {
             default:
                 throw new BadRequestException(
                     'Unsupported OAuth provider: ' + provider,
-                    ErrorType.INVALID_REQUEST,
+                    ErrorType.InvalidRequest,
                     'The specified OAuth provider is not supported.',
                 );
         }

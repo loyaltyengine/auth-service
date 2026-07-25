@@ -5,18 +5,18 @@ import { OauthPrismaRepository } from './repositories/oauth-prisma.repository';
 import { OauthFactoryService } from './services/oauth-factory.service';
 import { OauthController } from './controllers/oauth.controller';
 import { UsersModule } from '../users/users.module';
-import { OauthService } from './services/oauth.service';
+import { OauthServiceImpl } from './services/oauth.service';
 
 @Module({
-  imports: [UsersModule],
-  controllers: [OauthController],
-  providers: [
-    OauthService,
-    OauthFactoryService,
-    GoogleOauthStrategy,
-    GithubOauthStrategy,
-    { provide: 'IOauthRepository', useClass: OauthPrismaRepository },
-  ],
-  exports: [OauthService, OauthFactoryService],
+    imports: [UsersModule],
+    controllers: [OauthController],
+    providers: [
+        { provide: 'OauthService', useClass: OauthServiceImpl },
+        OauthFactoryService,
+        GoogleOauthStrategy,
+        GithubOauthStrategy,
+        { provide: 'OauthRepository', useClass: OauthPrismaRepository },
+    ],
+    exports: ['OauthService', OauthFactoryService],
 })
 export class OauthModule {}

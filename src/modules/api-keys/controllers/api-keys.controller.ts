@@ -1,12 +1,12 @@
-import { Controller, Post, Req, UseGuards, Param, HttpCode, HttpStatus, Body } from '@nestjs/common';
-import { ApiKeysService } from '../services/api-keys.service';
+import { Controller, Post, Req, UseGuards, Param, HttpCode, HttpStatus, Body, Inject } from '@nestjs/common';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import type { Response as ApiResponse, CreateApiKeyRequest, CreateApiKeyResponse } from 'src/generated/loyaltyengine/auth/v1';
+import type { Response as ApiResponse, CreateApiKeyRequest, CreateApiKeyResponse } from '@loyalty-engine/auth-v1-types';
 import { extractApiKeyFromHeader } from 'src/shared/utils';
+import type { ApiKeysService } from '../services/api-keys-service.interface';
 
 @Controller('auth/v1/')
 export class ApiKeysController {
-    constructor(private readonly apiKeysService: ApiKeysService) {}
+    constructor(@Inject('ApiKeysService') private readonly apiKeysService: ApiKeysService) {}
 
     @Post('properties/:propertyId/api-keys')
     @UseGuards(AuthGuard)

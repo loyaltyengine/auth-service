@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AuthService } from './auth-service.interface';
 import { LoginUserDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
@@ -7,12 +7,13 @@ import type { UsersService } from 'src/modules/users/services/users-service.inte
 import { createJti, verifyHashedValue } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { RegisterResultDto } from '../dto/register-result.dto';
-import { ErrorType } from 'src/shared/enums/error-type.enum';
+import { ErrorType } from '@loyalty-engine/auth-v1-types';
 import { RefreshResultDto } from '../dto/refresh-result.dto';
 import type { TokensService } from 'src/modules/tokens/services/tokens-service.interface';
 
 @Injectable()
 export class AuthServiceImpl implements AuthService {
+    private readonly logger = new Logger(AuthServiceImpl.name);
     constructor(
         @Inject('UsersService')
         private readonly usersService: UsersService,
@@ -21,11 +22,12 @@ export class AuthServiceImpl implements AuthService {
     ) {}
 
     async login(loginInfo: LoginUserDto): Promise<LoginResultDto> {
+        this.logger.log('Login attempt for user: ' + loginInfo.email);
         const passwordUser = await this.usersService.findUserByEmailWithPassword(loginInfo.email);
         if (!passwordUser?.password || !(await verifyHashedValue(loginInfo.password, passwordUser.password))) {
             throw new AuthenticationException(
                 'Authentication failed',
-                ErrorType.INVALID_CREDENTIALS,
+                ErrorType.InvalidCredentials,
                 'The provided email or password is incorrect',
             );
         }
@@ -49,6 +51,7 @@ export class AuthServiceImpl implements AuthService {
     }
 
     async register(registerInfo: RegisterDto): Promise<RegisterResultDto> {
+        this.logger.log('Register attempt for user: ' + registerInfo.email);
         const createdUser = await this.usersService.createUser({
             email: registerInfo.email,
             isEmailPrimary: true,
@@ -58,16 +61,18 @@ export class AuthServiceImpl implements AuthService {
         });
 
         return {
-            user: createdUser
+            user: createdUser,
         };
     }
 
     async logout(accessToken: string, refreshToken: string): Promise<void> {
+        this.logger.log('Logout attempt for user: ' + accessToken);
         await this.tokensService.revokeAccessToken(accessToken);
         await this.tokensService.revokeRefreshToken(refreshToken);
     }
 
     async refreshToken(refreshToken: string): Promise<RefreshResultDto> {
+        this.logger.log('Refresh token attempt for user: ' + refreshToken);
         const payload = await this.tokensService.verifyRefreshToken(refreshToken);
         const user = await this.usersService.getActiveUserById(payload.userId);
 
