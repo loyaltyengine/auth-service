@@ -1,10 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { IPropertiesService } from './properties-service.interface';
+import { Injectable, Logger } from '@nestjs/common';
+import { PropertiesService } from './properties-service.interface';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+import { PropertyUserResponse } from '@loyalty-engine/properties-v1-types';
 
 @Injectable()
-export class PropertiesService implements IPropertiesService {
+export class PropertiesServiceImpl implements PropertiesService {
+    private readonly logger = new Logger(PropertiesServiceImpl.name);
+    constructor(private readonly httpService: HttpService) {}
+
     async validatePropertyOwnership(propertyId: string, userId: string): Promise<boolean> {
-        // TODO: call the Properties Service to validate ownership
-        return true;
+        // Fetch property user
+        const apiURl: string = `${process.env.PROPERTIES_SERVICE_URL}/v1/properties/${propertyId}/users/${userId}`;
+        this.logger.log('Calling properties API: ' + apiURl);
+
+        try {
+            const { data } = await firstValueFrom(
+                this.httpService.get<PropertyUserResponse>(apiURl, {
+                    validateStatus: (status) => status === 200 || status === 404,
+                }),
+            );
+
+            // Check if the property user was found
+            return data.status.code === 200;
+        } catch (error) {
+            this.logger.error('Error occurred while trying to fetch property user');
+            throw new Error('Error occurred while trying to fetch property user');
+        }
     }
 }

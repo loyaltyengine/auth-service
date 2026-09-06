@@ -1,4 +1,3 @@
-import { PropertiesService } from 'src/modules/properties/services/properties.service';
 import { ApiKeyDto } from '../dto/api-key.dto';
 import { ApiKeysService } from './api-keys-service.interface';
 import { ErrorType } from '@loyalty-engine/auth-v1-types';
@@ -9,12 +8,14 @@ import { hashValue, verifyHashedValue, createFingerprint } from 'src/shared/util
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { ForbiddenException } from 'src/shared/exceptions/forbidden.exception';
 import { ConflictException } from 'src/shared/exceptions/conflict.exception';
+import type { PropertiesService } from '../../properties/services/properties-service.interface';
 
 @Injectable()
 export class ApiKeysServiceImpl implements ApiKeysService {
     private readonly logger = new Logger(ApiKeysServiceImpl.name);
 
     constructor(
+        @Inject('PropertiesService')
         private readonly propertiesService: PropertiesService,
         @Inject('ApiKeysRepository')
         private readonly apiKeysRepository: ApiKeysRepository,

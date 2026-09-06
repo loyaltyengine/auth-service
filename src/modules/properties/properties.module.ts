@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common';
-import { PropertiesService } from './services/properties.service';
+import { PropertiesServiceImpl } from './services/properties.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-    exports: [PropertiesService],
-    providers: [PropertiesService],
+    imports: [HttpModule],
+    exports: ['PropertiesService'],
+    providers: [{
+        provide: 'PropertiesService',
+        useClass: PropertiesServiceImpl
+    }],
 })
 export class PropertiesModule {}
