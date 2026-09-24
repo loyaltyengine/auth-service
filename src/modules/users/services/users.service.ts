@@ -7,7 +7,7 @@ import { BadRequestException } from 'src/shared/exceptions/bad-request.exception
 import { hashValue } from 'src/shared/utils';
 import { PasswordUserDto } from '../dto/password-user.dto';
 import { UserMapper } from '../mappers/user.mapper';
-import { ErrorType } from '@loyalty-engine/auth-v1-types';
+import { ErrorType } from '@loyalty-engine/auth';
 import { NotFoundException } from 'src/shared/exceptions/not-found.exception';
 import { EmailDto } from '../dto/email.dto';
 import { MakePrimaryEmailResultDto } from '../dto/make-primary-email-result.dto';

@@ -1,4 +1,4 @@
-import {ErrorDetail, ErrorType } from '@loyalty-engine/auth-v1-types';
+import {ErrorDetail, ErrorType } from '@loyalty-engine/auth';
 import { ApiException} from './api.exception';
 
 export class BadRequestException extends ApiException {

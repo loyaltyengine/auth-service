@@ -1,4 +1,4 @@
-import { ErrorType } from '@loyalty-engine/auth-v1-types';
+import { ErrorType } from '@loyalty-engine/auth';
 import { ApiException } from './api.exception';
 
 export class ForbiddenException extends ApiException {

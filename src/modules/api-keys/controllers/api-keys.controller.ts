@@ -1,6 +1,6 @@
 import { Controller, Post, Req, UseGuards, Param, HttpCode, HttpStatus, Body, Inject } from '@nestjs/common';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import type { Response as ApiResponse, CreateApiKeyRequest, CreateApiKeyResponse } from '@loyalty-engine/auth-v1-types';
+import type { Response as ApiResponse, CreateApiKeyRequest, CreateApiKeyResponse } from '@loyalty-engine/auth';
 import { extractApiKeyFromHeader } from 'src/shared/utils';
 import type { ApiKeysService } from '../services/api-keys-service.interface';
 

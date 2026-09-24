@@ -1,6 +1,6 @@
 import { Controller, Get, Inject, Param, Post, Query, Res } from '@nestjs/common';
 import type { Response } from 'express';
-import { LoginResponse } from '@loyalty-engine/auth-v1-types';
+import { LoginResponse } from '@loyalty-engine/auth';
 import { AuthMapper } from 'src/modules/auth/mappers/auth.mapper';
 import type { OauthService } from '../services/oauth-service.interface';
 
