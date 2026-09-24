@@ -17,7 +17,7 @@ import type { TokensRepository } from '../repositories/tokens-repository.interfa
 import { createJti, hashValue, verifyHashedValue } from 'src/shared/utils';
 import { RefreshTokenPayload } from '../payloads/refresh-token.payload';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
-import { ErrorType } from '@loyalty-engine/auth-v1-types';
+import { ErrorType } from '@loyalty-engine/auth';
 
 @Injectable()
 export class TokensServiceImpl implements TokensService {

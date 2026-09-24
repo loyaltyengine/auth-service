@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { Request } from 'express';
 import { randomBytes, createHmac } from 'node:crypto';
 import { AuthenticationException } from '../exceptions/authentication.exception';
-import { ErrorType } from '@loyalty-engine/auth-v1-types';
+import { ErrorType } from '@loyalty-engine/auth';
 
 export const hashValue = async (value: string): Promise<string> => {
     return bcrypt.hash(value, HASH_SALT_ROUNDS);

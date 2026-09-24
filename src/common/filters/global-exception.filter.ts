@@ -1,6 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
 import { Response } from 'express';
-import { ErrorResponse, ErrorType, ErrorDetail } from '@loyalty-engine/auth-v1-types';
+import { ErrorResponse, ErrorType, ErrorDetail } from '@loyalty-engine/auth';
 import { ApiException } from 'src/shared/exceptions/api.exception';
 
 @Catch()

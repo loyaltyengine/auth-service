@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import type { UsersService } from '../services/users-service.interface';
-import { Response as ApiResponse, ChangePrimaryEmailResponse, EmailListResponse, EmailResponse, UserResponse } from '@loyalty-engine/auth-v1-types';
+import { Response as ApiResponse, ChangePrimaryEmailResponse, EmailListResponse, EmailResponse, UserResponse } from '@loyalty-engine/auth';
 import { UserMapper } from '../mappers/user.mapper';
 
 @Controller('auth/v1/users')

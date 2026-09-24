@@ -7,7 +7,7 @@ import type { UsersService } from 'src/modules/users/services/users-service.inte
 import { createJti, verifyHashedValue } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 import { RegisterResultDto } from '../dto/register-result.dto';
-import { ErrorType } from '@loyalty-engine/auth-v1-types';
+import { ErrorType } from '@loyalty-engine/auth';
 import { RefreshResultDto } from '../dto/refresh-result.dto';
 import type { TokensService } from 'src/modules/tokens/services/tokens-service.interface';
 
