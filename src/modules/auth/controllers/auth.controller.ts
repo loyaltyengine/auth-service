@@ -83,6 +83,18 @@ export class AuthController {
         return { status: { code: HttpStatus.OK, message: 'Logout successful' } };
     }
 
+    @Get('verify-token')
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    async  verifyToken(): Promise<ApiResponse>{
+        return {
+            status:{
+                code:200,
+                message: 'Valid token'
+            }
+        }
+    }
+
     // For testing the AuthGuard
     @Get('protected')
     @UseGuards(AuthGuard)

@@ -11,7 +11,7 @@ export class PropertiesServiceImpl implements PropertiesService {
 
     async validatePropertyOwnership(propertyId: string, userId: string): Promise<boolean> {
         // Fetch property user
-        const apiURl: string = `${process.env.PROPERTIES_SERVICE_URL}/v1/properties/${propertyId}/users/${userId}`;
+        const apiURl: string = `${process.env.PROPERTIES_SERVICE_URL}/properties-api/v1/properties/${propertyId}/users/${userId}/assignments`;
         this.logger.log('Calling properties API: ' + apiURl);
 
         try {
