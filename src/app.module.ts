@@ -11,6 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ApiKeysModule } from './modules/api-keys/api-keys.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { OauthModule } from './modules/oauth/oauth.module';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
     imports: [
@@ -38,6 +39,7 @@ import { OauthModule } from './modules/oauth/oauth.module';
         ApiKeysModule,
         PropertiesModule,
         OauthModule,
+        HealthModule,
     ],
     controllers: [],
     providers: [],
