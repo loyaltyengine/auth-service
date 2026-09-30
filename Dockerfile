@@ -7,6 +7,9 @@ ENV NODE_ENV production
 
 WORKDIR /usr/src/app
 
+# Install curl
+RUN apk add --no-cache curl
+
 # Install nestjs cli
 RUN npm install -g @nestjs/cli
 
