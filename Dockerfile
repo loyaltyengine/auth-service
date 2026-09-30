@@ -35,4 +35,4 @@ EXPOSE 3001
 # Run the application.
 # Make sure the database is ready before starting the application so that Prisma migrations can be applied
 # in docker compos, add depends_on: to the auth-service service to ensure the database is ready
-CMD npx prisma migrate deploy && npm run start
+CMD npx prisma migrate deploy && node dist/src/main
