@@ -1,12 +1,24 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Inject,
+    Post,
+    Req,
+    Res,
+    UseGuards,
+    UsePipes,
+} from '@nestjs/common';
 import type { Request, Response } from 'express';
 import type {
-    Response as ApiResponse,
     LoginRequest,
     LoginResponse,
     RefreshResponse,
     RegisterRequest,
     RegisterResponse,
+    Response as ApiResponse,
 } from '@loyalty-engine/auth';
 import { AuthMapper } from '../mappers/auth.mapper';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
@@ -15,15 +27,16 @@ import { registerRequestSchema } from '../validation/register.schema';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 import {
     REFRESH_TOKEN_COOKIE_NAME,
-    REFRESH_TOKEN_COOKIE_PATH,
     REFRESH_TOKEN_COOKIE_OPTIONS,
+    REFRESH_TOKEN_COOKIE_PATH,
+    USER_ID_HEADER_NAME,
 } from 'src/shared/constants';
 import { RefreshToken } from 'src/common/decorators/refresh-token.decorator';
 import type { AuthService } from '../services/auth-service.interface';
 
 @Controller('auth/v1')
 export class AuthController {
-    constructor(@Inject('AuthService') private readonly authService: AuthService) { }
+    constructor(@Inject('AuthService') private readonly authService: AuthService) {}
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
@@ -86,13 +99,20 @@ export class AuthController {
     @Get('verify-token')
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthGuard)
-    async  verifyToken(): Promise<ApiResponse>{
+    async verifyToken(@Req() req: any, @Res({ passthrough: true }) res: Response): Promise<ApiResponse> {
+        // Get userId from request
+        const userId = req.user.userId;
+
+        // Attach userId to header
+        res.setHeader(USER_ID_HEADER_NAME, userId);
+
+        // Response body
         return {
-            status:{
-                code:200,
-                message: 'Valid token'
-            }
-        }
+            status: {
+                code: 200,
+                message: 'Valid token',
+            },
+        };
     }
 
     // For testing the AuthGuard
