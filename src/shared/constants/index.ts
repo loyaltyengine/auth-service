@@ -29,5 +29,8 @@ export const REFRESH_TOKEN_COOKIE_OPTIONS = {
     path: REFRESH_TOKEN_COOKIE_PATH,
 };
 
+// Headers
+export const USER_ID_HEADER_NAME = 'X-User-Id';
+
 export const KEY_LOOKUP_SECRET = process.env.KEY_LOOKUP_SECRET || 'my_key_lookup_secret';
 export const API_KEY_HEADER_NAME = 'x-api-key';
