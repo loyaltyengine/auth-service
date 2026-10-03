@@ -10,6 +10,7 @@ logs
 
 # Tests
 /coverage
+.vitest
 
 # JetBrains IDEs
 /.idea
