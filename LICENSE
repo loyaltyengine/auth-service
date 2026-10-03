@@ -1,0 +1,118 @@
+================================================================================
+END-USER LICENSE AGREEMENT (EULA)
+Copyright (c) 2026 Loyalty Engine. All rights reserved.
+================================================================================
+
+This License applies to all software applications, components, and source code
+files contained within this project and its related repositories, known
+collectively as Loyalty Engine, including any updates supplied under this
+License (“Software”), unless a specific directory or file explicitly indicates
+that separate license terms apply.
+
+By downloading, cloning, installing, copying, or otherwise using any part of
+this Software, you agree to be bound by the terms of this License. If you do
+not agree, you must not download, install, clone, or use the Software.
+
+If you download or use this Software on behalf of an organisation, you confirm
+that you have authority to bind that organisation, and “you” refers to that
+organisation.
+
+
+1. GRANT OF USE
+--------------------------------------------------------------------------------
+Subject to the terms of this License, the Licensor grants you a free,
+non-exclusive, non-transferable, personal, limited right to install and run
+the Software on devices owned or controlled by you for your own internal
+business or personal purposes.
+
+Your employees may use the Software solely for your internal business purposes,
+provided that you ensure their compliance with this License. No other
+third-party use is permitted. This License does not transfer ownership of
+the Software or grant any rights except those expressly stated. The Licensor
+and its licensors retain all intellectual property rights in the Software.
+The Licensor is not obliged to provide maintenance, support, or updates.
+
+
+2. RESTRICTIONS
+--------------------------------------------------------------------------------
+You are strictly prohibited from:
+- Redistributing: Selling, renting, leasing, sublicensing, publishing, or
+  distributing copies of the Software or any portion of it to any third party.
+- Sharing: Transmitting or making the Software available to any third party.
+  Private cloud storage is permitted only for the backup copy allowed below,
+  provided that access is restricted to you and your authorised employees.
+  You may not provide third parties with hosted or remote access to the Software
+  via online services, cloud networks, or file-sharing platforms.
+- Copying: Duplicating or reproducing the source code or binary files, except
+  for copies reasonably necessary to install and run the Software as permitted
+  under Clause 1, and a single backup copy for your own archival purposes. You
+  must retain all copyright and proprietary notices on permitted copies.
+- Reverse Engineering: Decompiling, disassembling, or attempting to derive
+  the source code of the Software.
+- Modifying: Altering, adapting, or creating derivative works based on the
+  Software.
+
+These restrictions do not prohibit conduct that you have a statutory right to
+undertake and that cannot lawfully be restricted by contract. Any third-party
+components identified as subject to separate licence terms remain governed by
+those terms; this License does not restrict rights granted under those separate
+terms.
+
+
+3. NO WARRANTY & LIMITATION OF LIABILITY
+--------------------------------------------------------------------------------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE LICENSOR AND ITS LICENSORS WILL NOT
+BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. NOTHING IN THIS LICENSE
+EXCLUDES OR LIMITS ANY MANDATORY CONSUMER RIGHT, ANY LIABILITY THAT CANNOT
+LAWFULLY BE EXCLUDED OR LIMITED, OR LIABILITY FOR FRAUD, WILFUL MISCONDUCT, OR
+GROSS NEGLIGENCE.
+
+
+4. TERMINATION
+--------------------------------------------------------------------------------
+This License continues until terminated. You may terminate it at any time by
+stopping all use of the Software and deleting all copies in your possession
+or control.
+
+The Licensor may terminate this License by written notice if you materially
+breach it and fail to remedy the breach within 14 days after receiving written
+notice identifying the breach. The Licensor may terminate immediately by written
+notice if the breach cannot be remedied or involves unauthorised distribution or
+third-party access.
+
+On termination, you must immediately stop using the Software and delete all
+copies in your possession or control, including backups. Termination does not
+affect accrued rights or liabilities. The ownership provisions in Clause 1 and
+Clauses 2, 3, 5, and 6 survive termination.
+
+
+5. GOVERNING LAW AND DISPUTES
+--------------------------------------------------------------------------------
+This License is governed by the laws of South Africa. The courts of South Africa
+have non-exclusive jurisdiction over disputes arising from this License. This
+clause does not deprive you of mandatory consumer protections or any right to
+use a court, tribunal, or complaints process that cannot lawfully be excluded.
+
+
+6. NOTICES AND GENERAL
+--------------------------------------------------------------------------------
+Notices to the Licensor must be sent to legal@loyaltyengine.org. Notices to you
+may be sent to the email address you supplied when obtaining or registering the
+Software. Email notices are deemed received on the next business day after
+sending, unless the sender receives an automated delivery-failure message. If
+you have not supplied an email address, notices to you must be delivered through
+the Software and are deemed received when displayed to you. A business day
+excludes Saturdays, Sundays, and public holidays at the recipient’s location.
+
+This License constitutes the entire agreement concerning use of the Software,
+except for separate third-party licence terms identified under Clause 2. Changes
+require your express agreement. If any provision is unenforceable, it will be
+severed to the extent necessary, and the remaining provisions will continue in
+effect. A failure or delay in enforcing a provision does not waive the right
+to enforce it later.
