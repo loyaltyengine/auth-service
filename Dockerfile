@@ -9,7 +9,6 @@ RUN npm install -g @nestjs/cli
 
 # Copy dependencies files
 COPY package*.json ./
-COPY libs/ ./libs/
 COPY tsconfig*.json ./
 
 # Install dependencies. Cann also use --omit=dev flag if dev dependencies are not needed
