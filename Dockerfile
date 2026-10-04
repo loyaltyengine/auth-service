@@ -24,7 +24,7 @@ RUN npm run build
 FROM node:${NODE_VERSION}-alpine AS runner
 
 # Add production environment as container environment
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
 
@@ -49,5 +49,5 @@ EXPOSE 3001
 
 # Run the application.
 # Make sure the database is ready before starting the application so that Prisma migrations can be applied
-# in docker compos, add depends_on: to the auth-service service to ensure the database is ready
-CMD npx prisma migrate deploy && node dist/src/main
+# in docker compose, add depends_on: to the auth-service service to ensure the database is ready
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main"]
