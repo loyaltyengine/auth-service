@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PropertiesService } from './properties-service.interface';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { PropertyUserResponse } from '@loyalty-engine/properties';
+import { PropertyUserResponse } from '@loyaltyengine/properties-client';
 
 @Injectable()
 export class PropertiesServiceImpl implements PropertiesService {

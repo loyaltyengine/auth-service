@@ -1,6 +1,6 @@
 import { ApiKeyDto } from '../dto/api-key.dto';
 import { ApiKeysService } from './api-keys-service.interface';
-import { ErrorType } from '@loyalty-engine/auth';
+import { ErrorType } from '@loyaltyengine/auth-client';
 import type { ApiKeysRepository } from '../repositories/api-keys-repository.interface';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'node:crypto';

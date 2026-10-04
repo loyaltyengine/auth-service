@@ -1,6 +1,6 @@
 import { UserDto } from '../../src/modules/users/dto/user.dto';
 import { RegisterResultDto } from '../../src/modules/auth/dto/register-result.dto';
-import type { RegisterRequest } from '@loyalty-engine/auth';
+import type { RegisterRequest } from '@loyaltyengine/auth-client';
 import { RegisterDto } from '../../src/modules/auth/dto/register.dto';
 import { PasswordUserDto } from '../../src/modules/users/dto/password-user.dto';
 import { AccessTokenDto } from '../../src/modules/tokens/dto/access-token.dto';

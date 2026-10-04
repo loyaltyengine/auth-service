@@ -32,7 +32,6 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache curl
 
 COPY package*.json ./
-COPY libs/ ./libs/
 
 # Install ONLY production dependencies only and not dev dependencies
 RUN npm ci --omit=dev

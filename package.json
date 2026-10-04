@@ -22,8 +22,8 @@
         "prisma:migrate": "npx prisma migrate dev"
     },
     "dependencies": {
-        "@loyalty-engine/auth": "file:libs/loyalty-engine-auth-1.0.1.tgz",
-        "@loyalty-engine/properties": "file:libs/loyalty-engine-properties-1.0.0.tgz",
+        "@loyaltyengine/auth-client": "^1.0.0",
+        "@loyaltyengine/properties-client": "^1.0.1",
         "@nestjs/axios": "^12.0.1",
         "@nestjs/cache-manager": "^3.0.1",
         "@nestjs/common": "^11.0.1",
