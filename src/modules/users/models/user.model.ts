@@ -1,4 +1,4 @@
-import { EmailModel, UserModel as PrismaUser } from 'src/generated/prisma/models';
+import { EmailModel, UserModel as PrismaUser } from 'src/database/gen/models';
 
 export interface UserModel extends PrismaUser {
     emails: EmailModel[];

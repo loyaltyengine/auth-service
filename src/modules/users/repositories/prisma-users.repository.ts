@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users-repository.interface';
 import { UserModel } from '../models/user.model';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/database/prisma.service';
 
 import { CreateUserData } from './types/create-user.data';
 import { EmailModel } from '../models/email.model';

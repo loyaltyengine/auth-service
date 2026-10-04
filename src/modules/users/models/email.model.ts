@@ -1,3 +1,3 @@
-import { Email as PrismaEmail } from 'src/generated/prisma/client';
+import { Email as PrismaEmail } from 'src/database/gen/client';
 
 export type EmailModel = PrismaEmail;

@@ -1,3 +1,3 @@
-import { Prisma } from 'src/generated/prisma/client';
+import { Prisma } from 'src/database/gen/client';
 
 export type UpdateApiKeyData = Prisma.ApiKeyUpdateInput;

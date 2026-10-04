@@ -1,4 +1,4 @@
-import { PrismaService } from "src/modules/prisma/prisma.service";
+import { PrismaService } from "src/database/prisma.service";
 import { OauthRepository } from "./oauth-repository.interface";
 import { OauthAccountModel } from "../models/oauth-account.model";
 
