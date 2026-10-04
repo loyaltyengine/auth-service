@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../src/database/gen"
   moduleFormat = "cjs"
 }
 
@@ -31,7 +31,7 @@ model Email {
   isPrimary       Boolean  @default(false) @map("is_primary")
   isVerified      Boolean  @default(false) @map("is_verified")
   createdAt       DateTime @default(now()) @map("created_at")
-  
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])

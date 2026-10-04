@@ -1,3 +1,3 @@
-import { OauthAccount } from "src/generated/prisma/client";
+import { OauthAccount } from "src/database/gen/client";
 
 export type OauthAccountModel = OauthAccount;

@@ -1,4 +1,4 @@
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from 'src/database/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { ApiKeysRepository } from './api-keys-repository.interface';
 import { ApiKeyModel } from '../models/api-key.model';

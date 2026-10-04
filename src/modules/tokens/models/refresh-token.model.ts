@@ -1,3 +1,3 @@
-import { RefreshToken } from 'src/generated/prisma/client';
+import { RefreshToken } from 'src/database/gen/client';
 
 export type RefreshTokenModel = RefreshToken;
