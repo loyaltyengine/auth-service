@@ -10,10 +10,10 @@ on:
   pull_request:
     branches: [ "master" ]
 
-# Environment Variables
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: loyaltyengine/loyalty-engine-auth
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
 
 # Jobs
 jobs:
