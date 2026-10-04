@@ -1,6 +1,6 @@
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 import type { Schema } from 'joi';
-import { ErrorType } from '@loyalty-engine/auth';
+import { ErrorType } from '@loyaltyengine/auth-client';
 import { BadRequestException } from 'src/shared/exceptions/bad-request.exception';
 
 @Injectable()

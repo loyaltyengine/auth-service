@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { REFRESH_TOKEN_COOKIE_NAME } from 'src/shared/constants';
-import { ErrorType } from '@loyalty-engine/auth';
+import { ErrorType } from '@loyaltyengine/auth-client';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 
 export const RefreshToken = createParamDecorator((data: unknown, ctx: ExecutionContext): string => {

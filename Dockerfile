@@ -9,7 +9,6 @@ RUN npm install -g @nestjs/cli
 
 # Copy dependencies files
 COPY package*.json ./
-COPY libs/ ./libs/
 COPY tsconfig*.json ./
 
 # Install dependencies. Cann also use --omit=dev flag if dev dependencies are not needed
@@ -32,7 +31,6 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache curl
 
 COPY package*.json ./
-COPY libs/ ./libs/
 
 # Install ONLY production dependencies only and not dev dependencies
 RUN npm ci --omit=dev

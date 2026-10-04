@@ -1,7 +1,7 @@
 import { UserModel } from '../models/user.model';
 import { UserDto } from '../dto/user.dto';
 import { PasswordUserDto } from '../dto/password-user.dto';
-import { Email, EmailListResponse, EmailResponse, User as ApiUser, UserResponse } from '@loyalty-engine/auth';
+import { Email, EmailListResponse, EmailResponse, User as ApiUser, UserResponse } from '@loyaltyengine/auth-client';
 import { StatusDto } from 'src/shared/dto/status.dto';
 import { EmailModel } from '../models/email.model';
 import { EmailDto } from '../dto/email.dto';

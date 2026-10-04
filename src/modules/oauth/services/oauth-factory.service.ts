@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GithubOauthStrategy } from '../strategies/github-oauth.strategy';
 import { GoogleOauthStrategy } from '../strategies/google-oauth.strategy';
 import { BadRequestException } from 'src/shared/exceptions/bad-request.exception';
-import { ErrorType } from '@loyalty-engine/auth';
+import { ErrorType } from '@loyaltyengine/auth-client';
 
 @Injectable()
 export class OauthFactoryService {

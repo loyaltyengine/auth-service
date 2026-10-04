@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { LoginRequest } from '@loyalty-engine/auth';
+import { LoginRequest } from '@loyaltyengine/auth-client';
 import { EMAIL_VALIDATION, PASSWORD_VALIDATION } from 'src/shared/validation/joi-validations';
 
 export const loginRequestSchema = Joi.object<LoginRequest>({

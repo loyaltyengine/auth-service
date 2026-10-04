@@ -6,7 +6,7 @@ import type { OauthRepository } from '../repositories/oauth-repository.interface
 import { LoginResultDto } from 'src/modules/auth/dto/login-result.dto';
 import { createJti } from 'src/shared/utils';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
-import { ErrorType } from '@loyalty-engine/auth';
+import { ErrorType } from '@loyaltyengine/auth-client';
 import { UserDto } from 'src/modules/users/dto/user.dto';
 import type { UsersService } from 'src/modules/users/services/users-service.interface';
 import type { TokensService } from 'src/modules/tokens/services/tokens-service.interface';

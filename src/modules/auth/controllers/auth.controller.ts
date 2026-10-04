@@ -19,7 +19,7 @@ import type {
     RegisterRequest,
     RegisterResponse,
     Response as ApiResponse,
-} from '@loyalty-engine/auth';
+} from '@loyaltyengine/auth-client';
 import { AuthMapper } from '../mappers/auth.mapper';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
 import { loginRequestSchema } from '../validation/login.schema';
