@@ -26,7 +26,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
                 this.buildResponse(
                     500,
                     'Internal server error',
-                    ErrorType.InternalServerError,
+                    'internal_server_error',
                     errorDescription,
                 ),
             );

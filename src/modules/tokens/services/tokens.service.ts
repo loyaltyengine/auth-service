@@ -17,7 +17,6 @@ import type { TokensRepository } from '../repositories/tokens-repository.interfa
 import { createJti, hashValue, verifyHashedValue } from 'src/shared/utils';
 import { RefreshTokenPayload } from '../payloads/refresh-token.payload';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
-import { ErrorType } from '@loyaltyengine/auth-client';
 
 @Injectable()
 export class TokensServiceImpl implements TokensService {
@@ -93,7 +92,7 @@ export class TokensServiceImpl implements TokensService {
         if (isBlacklisted) {
             throw new AuthenticationException(
                 'Authentication failed: Token has been revoked',
-                ErrorType.InvalidToken,
+                'invalid_token',
                 'The provided token has been revoked',
             );
         }
@@ -108,7 +107,7 @@ export class TokensServiceImpl implements TokensService {
         } catch {
             throw new AuthenticationException(
                 'Authentication failed: Invalid token',
-                ErrorType.InvalidToken,
+                'invalid_token',
                 'The provided token is invalid or expired',
             );
         }
@@ -160,7 +159,7 @@ export class TokensServiceImpl implements TokensService {
             if (!dbToken || dbToken.revoked || !(await verifyHashedValue(token, dbToken.tokenHash))) {
                 throw new AuthenticationException(
                     'Refresh token failed',
-                    ErrorType.InvalidToken,
+                    'invalid_token',
                     'The provided refresh token is invalid or has been revoked',
                 );
             }
@@ -172,7 +171,7 @@ export class TokensServiceImpl implements TokensService {
             }
             throw new AuthenticationException(
                 'Refresh token failed',
-                ErrorType.InvalidToken,
+                'invalid_token',
                 'The provided refresh token is invalid or expired',
             );
         }
