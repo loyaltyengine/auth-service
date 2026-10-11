@@ -1,6 +1,5 @@
 import { ApiKeyDto } from '../dto/api-key.dto';
 import { ApiKeysService } from './api-keys-service.interface';
-import { ErrorType } from '@loyaltyengine/auth-client';
 import type { ApiKeysRepository } from '../repositories/api-keys-repository.interface';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'node:crypto';
@@ -28,7 +27,7 @@ export class ApiKeysServiceImpl implements ApiKeysService {
         if (!ownsProperty) {
             throw new ForbiddenException(
                 `User with ID ${userId} does not own property with ID ${propertyId}`,
-                ErrorType.ForbiddenError,
+               'forbidden_error',
                 'Cannot create API key for property not owned by user.',
             );
         }
@@ -57,8 +56,7 @@ export class ApiKeysServiceImpl implements ApiKeysService {
             } catch (err: any) {
                 // See: https://www.prisma.io/docs/orm/reference/error-reference
                 if (err?.code === 'P2002' && attempt < MAX_ATTEMPTS) {
-                    this.logger.log(`Collision detected on attempt ${attempt}, retrying...`);
-                    console.log(`Collision detected on attempt ${attempt}, retrying...`);
+                    this.logger.warn(`Collision detected on attempt ${attempt}, retrying...`);
                     continue;
                 }
                 throw err;
@@ -67,7 +65,7 @@ export class ApiKeysServiceImpl implements ApiKeysService {
 
         throw new ConflictException(
             `Failed to create unique API key after ${MAX_ATTEMPTS} attempts`,
-            ErrorType.ConflictError,
+            'conflict_error',
             'Could not generate a unique API key. Please try again later.',
         );
     }
@@ -78,7 +76,7 @@ export class ApiKeysServiceImpl implements ApiKeysService {
         if (!apiKey || !apiKey.isActive || !(await verifyHashedValue(key, apiKey.key))) {
             throw new AuthenticationException(
                 'API key authentication failed: Invalid API key',
-                ErrorType.InvalidApiKey,
+                'invalid_api_key',
                 'The provided API key is invalid',
             );
         }
@@ -90,7 +88,7 @@ export class ApiKeysServiceImpl implements ApiKeysService {
         if (!apiKey) {
             throw new AuthenticationException(
                 'Cannot deactivate API key: Key not found',
-                ErrorType.InvalidApiKey,
+                'invalid_api_key',
                 'The provided API key does not exist',
             );
         }

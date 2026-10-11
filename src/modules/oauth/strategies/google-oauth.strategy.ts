@@ -17,7 +17,6 @@ export class GoogleOauthStrategy implements OauthStrategy {
     }
 
     getProviderAuthUrl(state: string): string {
-
         return this.oauth2Client.generateAuthUrl({
             access_type: 'offline',
             scope: [

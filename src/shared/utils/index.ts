@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import { Request } from 'express';
 import { randomBytes, createHmac } from 'node:crypto';
 import { AuthenticationException } from '../exceptions/authentication.exception';
-import { ErrorType } from '@loyaltyengine/auth-client';
 
 export const hashValue = async (value: string): Promise<string> => {
     return bcrypt.hash(value, HASH_SALT_ROUNDS);
@@ -26,7 +25,7 @@ export const extractTokenFromHeader = (request: Request): string => {
     if (!header) {
         throw new AuthenticationException(
             'Missing authorization token',
-            ErrorType.EmptyToken,
+            'empty_token',
             'Provide a Bearer token in the Authorization header',
         );
     }
@@ -35,7 +34,7 @@ export const extractTokenFromHeader = (request: Request): string => {
     if (type !== 'Bearer' || !token) {
         throw new AuthenticationException(
             'Invalid authorization token',
-            ErrorType.InvalidToken,
+            'invalid_token',
             'Provide a valid Bearer token in the Authorization header',
         );
     }
@@ -48,7 +47,7 @@ export const extractApiKeyFromHeader = (request: Request): string => {
     if (!apiKey) {
         throw new AuthenticationException(
             'Missing API key in header',
-            ErrorType.MissingApiKey,
+            'missing_api_key',
             `Provide API key in the ${API_KEY_HEADER_NAME} header`,
         );
     }

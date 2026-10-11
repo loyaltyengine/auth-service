@@ -1,6 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { REFRESH_TOKEN_COOKIE_NAME } from 'src/shared/constants';
-import { ErrorType } from '@loyaltyengine/auth-client';
 import { AuthenticationException } from 'src/shared/exceptions/authentication.exception';
 
 export const RefreshToken = createParamDecorator((data: unknown, ctx: ExecutionContext): string => {
@@ -10,7 +9,7 @@ export const RefreshToken = createParamDecorator((data: unknown, ctx: ExecutionC
     if (!refreshToken) {
         throw new AuthenticationException(
             'Refresh token required',
-            ErrorType.EmptyToken,
+            'empty_token',
             'No refresh token provided in cookie',
         );
     }

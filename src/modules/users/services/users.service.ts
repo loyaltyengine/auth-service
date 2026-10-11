@@ -7,7 +7,6 @@ import { BadRequestException } from 'src/shared/exceptions/bad-request.exception
 import { hashValue } from 'src/shared/utils';
 import { PasswordUserDto } from '../dto/password-user.dto';
 import { UserMapper } from '../mappers/user.mapper';
-import { ErrorType } from '@loyaltyengine/auth-client';
 import { NotFoundException } from 'src/shared/exceptions/not-found.exception';
 import { EmailDto } from '../dto/email.dto';
 import { MakePrimaryEmailResultDto } from '../dto/make-primary-email-result.dto';
@@ -32,7 +31,7 @@ export class UsersServiceImpl implements UsersService {
     async createUser(user: CreateUserDto): Promise<UserDto> {
         this.logger.log('Creating a new user: ' + user.email);
         if (await this.usersRepository.emailExists(user.email)) {
-            throw new BadRequestException('Bad request', ErrorType.EmailAlreadyExists, 'Email already in use');
+            throw new BadRequestException('Bad request', 'email_already_exists', 'Email already in use');
         }
 
         const createUserData: CreateUserData = {
@@ -62,11 +61,11 @@ export class UsersServiceImpl implements UsersService {
     async getActiveUserById(id: string): Promise<UserDto> {
         const user = await this.usersRepository.findById(id);
         if (!user) {
-            throw new NotFoundException(this.USER_NOT_FOUND_MGS, ErrorType.NotFound, this.USER_NOT_FOUND_DESC);
+            throw new NotFoundException(this.USER_NOT_FOUND_MGS, 'not_found', this.USER_NOT_FOUND_DESC);
         }
 
         if (!user.isActive) {
-            throw new BadRequestException(this.INACTIVE_USER_MGS, ErrorType.InactiveUser, this.INACTIVE_USER_DESC);
+            throw new BadRequestException(this.INACTIVE_USER_MGS, 'inactive_user', this.INACTIVE_USER_DESC);
         }
         return UserMapper.toDto(user);
     }
@@ -74,11 +73,11 @@ export class UsersServiceImpl implements UsersService {
     async getActiveUserByEmail(email: string): Promise<UserDto> {
         const user = await this.usersRepository.findByEmail(email);
         if (!user) {
-            throw new NotFoundException(this.USER_NOT_FOUND_MGS, ErrorType.NotFound, this.USER_NOT_FOUND_DESC);
+            throw new NotFoundException(this.USER_NOT_FOUND_MGS, 'not_found', this.USER_NOT_FOUND_DESC);
         }
 
         if (!user.isActive) {
-            throw new BadRequestException(this.INACTIVE_USER_MGS, ErrorType.InactiveUser, this.INACTIVE_USER_DESC);
+            throw new BadRequestException(this.INACTIVE_USER_MGS, 'inactive_user', this.INACTIVE_USER_DESC);
         }
 
         return UserMapper.toDto(user);
@@ -114,7 +113,7 @@ export class UsersServiceImpl implements UsersService {
     async activateUserById(id: string): Promise<void> {
         const user = await this.usersRepository.findById(id);
         if (!user) {
-            throw new NotFoundException(this.USER_NOT_FOUND_MGS, ErrorType.NotFound, this.USER_NOT_FOUND_DESC);
+            throw new NotFoundException(this.USER_NOT_FOUND_MGS, 'not_found', this.USER_NOT_FOUND_DESC);
         }
 
         if (!user.isActive) {
@@ -134,7 +133,7 @@ export class UsersServiceImpl implements UsersService {
         if (!existingEmail) {
             throw new NotFoundException(
                 'Email not found',
-                ErrorType.NotFound,
+                'not_found',
                 'The specified email does not exist for the user',
             );
         }
@@ -159,7 +158,7 @@ export class UsersServiceImpl implements UsersService {
 
     async addEmailToUser(userId: string, email: string): Promise<EmailDto> {
         if (await this.usersRepository.emailExists(email)) {
-            throw new BadRequestException('Email already exists', ErrorType.EmailAlreadyExists, 'Email already in use');
+            throw new BadRequestException('Email already exists', 'email_already_exists', 'Email already in use');
         }
         const newEmail = await this.usersRepository.createEmail(userId, email);
         return UserMapper.toEmailDto(newEmail);
@@ -171,7 +170,7 @@ export class UsersServiceImpl implements UsersService {
             if (email.isPrimary) {
                 throw new BadRequestException(
                     'Cannot delete primary email',
-                    ErrorType.PrimaryEmail,
+                    'primary_email',
                     'Primary email cannot be deleted. Change primary email before deletion.',
                 );
             }
